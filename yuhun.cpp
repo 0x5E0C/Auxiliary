@@ -1,10 +1,10 @@
 #include "yuhun.h"
 
-yuhun::yuhun(HWND hwnd,int mode,int startTask)
+yuhun::yuhun(HWND hwnd,int mode,int threadid)
 {
     handle=hwnd;
     mode_type=mode;
-    id=startTask;
+    id=threadid;
 }
 
 /*函数功能:开始御魂模式程序流程*/
@@ -107,7 +107,7 @@ void yuhun::startTask()
         {
             if(matchmanager->matchTemplateAndGetValue("title.png",matchmanager->getScreenshot(0,0.25,0,0.15))>0.9)
             {
-                if(matchmanager->matchTemplateAndGetValue("leaderflag.png",matchmanager->getScreenshot(0.85,1,0.75,1))>0.9)
+                if(matchmanager->matchTemplateAndGetValue("leaderflag1.png",matchmanager->getScreenshot(0.85,1,0.75,1))>0.8 || matchmanager->matchTemplateAndGetValue("leaderflag2.png",matchmanager->getScreenshot(0.85,1,0.75,1))>0.8)
                 {
                     delayer->delayms(&runflag,2000);
                     int time=0;

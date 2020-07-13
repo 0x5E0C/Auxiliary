@@ -21,9 +21,10 @@
         <file>1440849/unfinish.png</file>
         <file>1440849/unprepare.png</file>
         <file>1440849/world.png</file>
-        <file>1440849/leaderflag.png</file>
         <file>1440849/victory.png</file>
         <file>1440849/prize.png</file>
+        <file>1440849/leaderflag1.png</file>
+        <file>1440849/leaderflag2.png</file>
     </qresource>
     <qresource prefix="/961579">
         <file>961579/chat.png</file>
@@ -47,8 +48,9 @@
         <file>961579/unfinish.png</file>
         <file>961579/world.png</file>
         <file>961579/unprepare.png</file>
-        <file>961579/leaderflag.png</file>
         <file>961579/victory.png</file>
         <file>961579/prize.png</file>
+        <file>961579/leaderflag1.png</file>
+        <file>961579/leaderflag2.png</file>
     </qresource>
 </RCC>

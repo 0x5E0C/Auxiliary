@@ -34,6 +34,7 @@ void MainWindow::Start()
 {
     if(Check())
     {
+        getWidgetsInfo();
         ui->chooseFloor->setEnabled(false);
         ui->isTeamMode->setEnabled(false);
         ui->editPersonCount->setEnabled(false);
@@ -46,7 +47,6 @@ void MainWindow::Start()
         addToShowArea("即将开始!",INFO);
         addToShowArea("读取设置中...",INFO);
         addToShowArea("已选择副本："+ui->chooseFloor->currentText(),INFO);
-        getWidgetsInfo();
         classifymanager=new classify();
         classifymanager->startTask();
     }
@@ -162,19 +162,19 @@ bool MainWindow::Check()
     }
     else
     {
-        if(isTeamModeEnbale && ui->isTeamMode->checkState()==Qt::Checked && (person_count>3 || person_count<=1))
+        if(ui->isTeamMode->isEnabled() && ui->isTeamMode->checkState()==Qt::Checked && (person_count>3 || person_count<=1))
         {
             QMessageBox::critical(this,"错误","组队人数输入错误!");
             addToShowArea("错误：组队人数输入应在1~3范围内!",ERR);
             return false;
         }
-        if((floor==floor_1_10 || floor==floor_11 || floor==floor_rlzy1 || floor==floor_rlzy2 || floor==floor_rlzy3) && isUsePropEnbale && prop_count<=0)
+        if((floor==floor_1_10 || floor==floor_11 || floor==floor_rlzy1 || floor==floor_rlzy2 || floor==floor_rlzy3) && ui->editPropCount->isEnabled() && prop_count<=0)
         {
             QMessageBox::critical(this,"错误","樱饼数量输入错误!");
             addToShowArea("错误：樱饼数量输入应大于0!",ERR);
             return false;
         }
-        if((floor==floor_tan || floor==floor_chen || floor==floor_chi) && isChallengeTimesEnbale && challengetimes<=0)
+        if((floor==floor_tan || floor==floor_chen || floor==floor_chi) && ui->editChallengetimes->isEnabled() && challengetimes<=0)
         {
             QMessageBox::critical(this,"错误","挑战次数输入错误!");
             addToShowArea("错误：挑战次数输入应大于0!",ERR);
@@ -219,7 +219,6 @@ void MainWindow::setTeamModeEnbale(bool state)
 {
     if(state)
     {
-        isTeamModeEnbale=true;
         ui->isTeamMode->setEnabled(true);
         if(ui->isTeamMode->checkState()==Qt::Checked)
         {
@@ -234,7 +233,6 @@ void MainWindow::setTeamModeEnbale(bool state)
     }
     else
     {
-        isTeamModeEnbale=false;
         ui->isTeamMode->setEnabled(false);
         ui->label_personcount->setEnabled(false);
         ui->editPersonCount->setEnabled(false);
@@ -246,13 +244,11 @@ void MainWindow::setUsePropEnbale(bool state)
 {
     if(state)
     {
-        isUsePropEnbale=true;
         ui->label_propcount->setEnabled(true);
         ui->editPropCount->setEnabled(true);
     }
     else
     {
-        isUsePropEnbale=false;
         ui->label_propcount->setEnabled(false);
         ui->editPropCount->setEnabled(false);
     }
@@ -263,13 +259,11 @@ void MainWindow::setChallengeTimesEnbale(bool state)
 {
     if(state)
     {
-        isChallengeTimesEnbale=true;
         ui->label_challengetimes->setEnabled(true);
         ui->editChallengetimes->setEnabled(true);
     }
     else
     {
-        isChallengeTimesEnbale=false;
         ui->label_challengetimes->setEnabled(false);
         ui->editChallengetimes->setEnabled(false);
     }
@@ -280,12 +274,10 @@ void MainWindow::setAddOtherOperationsEnable(bool state)
 {
     if(state)
     {
-        isAddOtherOperationsEnbale=true;
         ui->isAddOtherOperations->setEnabled(true);
     }
     else
     {
-        isAddOtherOperationsEnbale=false;
         ui->isAddOtherOperations->setEnabled(false);
     }
 }
@@ -312,7 +304,7 @@ void MainWindow::getWidgetsInfo()
 {
     guiInfo.challengetype=ui->pages->currentIndex();
     guiInfo.mfloor=ui->chooseFloor->currentIndex();
-    if(ui->isTeamMode->isChecked() && isTeamModeEnbale)
+    if(ui->isTeamMode->isChecked() && ui->isTeamMode->isEnabled())
     {
         guiInfo.isteam=true;
         guiInfo.person=ui->editPersonCount->text().toInt();
@@ -322,7 +314,7 @@ void MainWindow::getWidgetsInfo()
         guiInfo.isteam=false;
         guiInfo.person=-1;
     }
-    if(isUsePropEnbale)
+    if(ui->editPropCount->isEnabled())
     {
         guiInfo.propcount=ui->editPropCount->text().toInt();
     }
@@ -330,7 +322,7 @@ void MainWindow::getWidgetsInfo()
     {
         guiInfo.propcount=-1;
     }
-    if(isChallengeTimesEnbale)
+    if(ui->editChallengetimes->isEnabled())
     {
         guiInfo.challengetimes=ui->editChallengetimes->text().toInt();
     }

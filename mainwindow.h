@@ -34,10 +34,6 @@ public:
 private:
     Ui::MainWindow *ui;
     classify *classifymanager;
-    bool isTeamModeEnbale=true;
-    bool isUsePropEnbale=true;
-    bool isChallengeTimesEnbale=true;
-    bool isAddOtherOperationsEnbale=true;
     void View_Deinit();
     QString getCurrenttime(QString pattern);
 
