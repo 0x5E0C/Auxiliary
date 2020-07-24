@@ -31,6 +31,10 @@ void yuhun::startTask()
     default:
         break;
     }
+    if(mode_type==team_mode)
+    {
+        is_leader_thread=matchmanager->matchLeader();
+    }
     while(runflag)
     {
         if(countermanager->getType()==TIMES_TYPE)
@@ -88,11 +92,11 @@ void yuhun::startTask()
                 emit promptmanager->updateShowArea("窗口"+QString::number(id)+":"+"未检测到副本"+guiInfo.floortext+"界面!",ERR);
                 emit promptmanager->updateShowArea("窗口"+QString::number(id)+":"+"停止!",ERR);
                 emit promptmanager->errorevent();
-            }
+            } 
         }
         else if(mode_type==yyh_mode)
         {
-            if(matchmanager->matchProp())
+            if(matchmanager->matchProp(yyh_mode))
             {
                 controller->click(posInfo.common.single_challenge_pos.xpos,posInfo.common.single_challenge_pos.ypos);
             }
@@ -105,9 +109,9 @@ void yuhun::startTask()
         }
         else if(mode_type==team_mode)
         {
-            if(matchmanager->matchTemplateAndGetValue("title.png",matchmanager->getScreenshot(0,0.25,0,0.15))>0.9)
+            if(is_leader_thread)
             {
-                if(matchmanager->matchTemplateAndGetValue("leaderflag1.png",matchmanager->getScreenshot(0.85,1,0.75,1))>0.8 || matchmanager->matchTemplateAndGetValue("leaderflag2.png",matchmanager->getScreenshot(0.85,1,0.75,1))>0.8)
+                if(matchmanager->matchTemplateAndGetValue("title.png",matchmanager->getScreenshot(0,0.25,0,0.15))>0.9)
                 {
                     delayer->delayms(&runflag,2000);
                     int time=0;
@@ -127,12 +131,12 @@ void yuhun::startTask()
                         controller->click(posInfo.common.team_challenge_pos.xpos,posInfo.common.team_challenge_pos.ypos);
                     }
                 }
-            }
-            else
-            {
-                emit promptmanager->updateShowArea("窗口"+QString::number(id)+":"+"未检测到副本"+guiInfo.floortext+"界面!",ERR);
-                emit promptmanager->updateShowArea("窗口"+QString::number(id)+":"+"停止!",ERR);
-                emit promptmanager->errorevent();
+                else
+                {
+                    emit promptmanager->updateShowArea("窗口"+QString::number(id)+":"+"未检测到副本"+guiInfo.floortext+"界面!",ERR);
+                    emit promptmanager->updateShowArea("窗口"+QString::number(id)+":"+"停止!",ERR);
+                    emit promptmanager->errorevent();
+                }
             }
         }
         delayer->delayms(&runflag,1500);
@@ -158,7 +162,7 @@ void yuhun::startTask()
         }
         while(runflag && matchmanager->matchTemplateAndGetValue("victory.png",matchmanager->getScreenshot(0.2,0.6,0,0.5))<0.8)
         {
-            delayer->delayms(&runflag,500);
+            delayer->delayms(&runflag,100);
         }
         while(runflag && matchmanager->matchTemplateAndGetValue("prize.png",matchmanager->getScreenshot(0.3,0.75,0.45,1))<0.8)
         {
@@ -179,7 +183,7 @@ void yuhun::startTask()
         }
         else if(mode_type==yyh_mode)
         {
-            while(runflag && !matchmanager->matchProp())
+            while(runflag && !matchmanager->matchProp(yyh_mode))
             {
                 delayer->delayms(&runflag,500);
             }

@@ -56,6 +56,31 @@ void classify::startSingleModeMatch()
         }
         updateUIThread->is_update_ui_thread=true;
         break;
+    case C_JUEXING:
+        guiInfo.matchtarget=6;
+        juexing *juexing_updateUIThread;
+        for(int i=0;i<process_count;i++)
+        {
+            juexing *juexingmanager=new juexing(handle_list[i],single_mode,i);
+            connect(juexingmanager,SIGNAL(finished()),juexingmanager,SLOT(deleteLater()));
+            juexingmanager->start();
+            threadflaglist[i]=&(juexingmanager->runflag);
+            juexing_updateUIThread=juexingmanager;
+        }
+        juexing_updateUIThread->is_update_ui_thread=true;
+        break;
+    case C_YULING:
+        guiInfo.matchtarget=-4;
+        yuling *yuling_updateUIThread;
+        for(int i=0;i<process_count;i++)
+        {
+            yuling *yulingmanager=new yuling(handle_list[i],i);
+            connect(yulingmanager,SIGNAL(finished()),yulingmanager,SLOT(deleteLater()));
+            yulingmanager->start();
+            threadflaglist[i]=&(yulingmanager->runflag);
+            yuling_updateUIThread=yulingmanager;
+        }
+        break;
     default:
         break;
     }
@@ -81,16 +106,29 @@ void classify::startTeamModeMatch()
             guiInfo.matchtarget=8;
         }
         mode_type=team_mode;
-        yuhun *updateUIThread;
+        yuhun *yuhun_updateUIThread;
         for(int i=0;i<process_count;i++)
         {
             yuhun *yuhunmanager=new yuhun(handle_list[i],mode_type,i);
             connect(yuhunmanager,SIGNAL(finished()),yuhunmanager,SLOT(deleteLater()));
             yuhunmanager->start();
             threadflaglist[i]=&(yuhunmanager->runflag);
-            updateUIThread=yuhunmanager;
+            yuhun_updateUIThread=yuhunmanager;
         }
-        updateUIThread->is_update_ui_thread=true;
+        yuhun_updateUIThread->is_update_ui_thread=true;
+        break;
+    case C_JUEXING:
+        guiInfo.matchtarget=4;
+        juexing *juexing_updateUIThread;
+        for(int i=0;i<process_count;i++)
+        {
+            juexing *juexingmanager=new juexing(handle_list[i],team_mode,i);
+            connect(juexingmanager,SIGNAL(finished()),juexingmanager,SLOT(deleteLater()));
+            juexingmanager->start();
+            threadflaglist[i]=&(juexingmanager->runflag);
+            juexing_updateUIThread=juexingmanager;
+        }
+        juexing_updateUIThread->is_update_ui_thread=true;
         break;
     default:
         break;

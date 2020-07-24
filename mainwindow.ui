@@ -20,7 +20,7 @@
       <x>0</x>
       <y>0</y>
       <width>500</width>
-      <height>300</height>
+      <height>271</height>
      </rect>
     </property>
     <property name="font">
@@ -35,7 +35,7 @@
     <property name="currentIndex">
      <number>0</number>
     </property>
-    <widget class="QWidget" name="equipment">
+    <widget class="QWidget" name="yuhunpage">
      <property name="font">
       <font>
        <pointsize>11</pointsize>
@@ -57,14 +57,24 @@
       </property>
       <layout class="QGridLayout" name="gridLayout">
        <item row="1" column="0">
-        <widget class="QCheckBox" name="isTeamMode">
+        <widget class="QCheckBox" name="yuhun_isTeamMode">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+          </font>
+         </property>
          <property name="text">
           <string>组队模式</string>
          </property>
         </widget>
        </item>
        <item row="0" column="0">
-        <widget class="QComboBox" name="chooseFloor">
+        <widget class="QComboBox" name="yuhun_chooseFloor">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+          </font>
+         </property>
          <property name="currentText">
           <string>请选择副本类型</string>
          </property>
@@ -116,10 +126,15 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QLineEdit" name="editPersonCount"/>
+        <widget class="QLineEdit" name="yuhun_editPersonCount"/>
        </item>
        <item row="5" column="0">
-        <widget class="QCheckBox" name="isAddOtherOperations">
+        <widget class="QCheckBox" name="yuhun_isAddOtherOperations">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+          </font>
+         </property>
          <property name="text">
           <string>添加随机操作(推荐)</string>
          </property>
@@ -129,31 +144,46 @@
         </widget>
        </item>
        <item row="3" column="1">
-        <widget class="QLineEdit" name="editPropCount"/>
+        <widget class="QLineEdit" name="yuhun_editPropCount"/>
        </item>
        <item row="3" column="0">
-        <widget class="QLabel" name="label_propcount">
+        <widget class="QLabel" name="yuhun_label_propcount">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+          </font>
+         </property>
          <property name="text">
           <string>设置樱饼数量:</string>
          </property>
         </widget>
        </item>
        <item row="2" column="0">
-        <widget class="QLabel" name="label_personcount">
+        <widget class="QLabel" name="yuhun_label_personcount">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+          </font>
+         </property>
          <property name="text">
           <string>人数(上限3):</string>
          </property>
         </widget>
        </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_challengetimes">
+        <widget class="QLabel" name="yuhun_label_challengetimes">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+          </font>
+         </property>
          <property name="text">
           <string>设置挑战次数:</string>
          </property>
         </widget>
        </item>
        <item row="4" column="1">
-        <widget class="QLineEdit" name="editChallengetimes"/>
+        <widget class="QLineEdit" name="yuhun_editChallengetimes"/>
        </item>
       </layout>
      </widget>
@@ -163,26 +193,41 @@
         <x>330</x>
         <y>60</y>
         <width>119</width>
-        <height>144</height>
+        <height>141</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="QPushButton" name="button_start">
+        <widget class="QPushButton" name="yuhun_button_start">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+          </font>
+         </property>
          <property name="text">
           <string>开始</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="button_pause">
+        <widget class="QPushButton" name="yuhun_button_pause">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+          </font>
+         </property>
          <property name="text">
           <string>暂停</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="button_stop">
+        <widget class="QPushButton" name="yuhun_button_stop">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+          </font>
+         </property>
          <property name="text">
           <string>停止</string>
          </property>
@@ -190,37 +235,242 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="horizontalLayoutWidget">
+    </widget>
+    <widget class="QWidget" name="juexingpage">
+     <attribute name="title">
+      <string>觉醒</string>
+     </attribute>
+     <widget class="QWidget" name="verticalLayoutWidget_2">
       <property name="geometry">
        <rect>
-        <x>40</x>
-        <y>240</y>
-        <width>411</width>
-        <height>24</height>
+        <x>330</x>
+        <y>60</y>
+        <width>119</width>
+        <height>141</height>
        </rect>
       </property>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QVBoxLayout" name="verticalLayout_2">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QPushButton" name="juexing_button_start">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+           <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
+          </font>
+         </property>
          <property name="text">
-          <string>   分辨率:</string>
+          <string>开始</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QRadioButton" name="resolution1">
+        <widget class="QPushButton" name="juexing_button_pause">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
          <property name="text">
-          <string>1440*849(默认)</string>
+          <string>暂停</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="juexing_button_stop">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>停止</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="gridLayoutWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>80</y>
+        <width>243</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="juexing_editPersonCount">
+         <property name="minimumSize">
+          <size>
+           <width>58</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>58</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QLineEdit" name="juexing_editPropCount">
+         <property name="minimumSize">
+          <size>
+           <width>58</width>
+           <height>0</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>58</width>
+           <height>16777215</height>
+          </size>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="juexing_label_personcount">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>人数(上限3):</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QCheckBox" name="juexing_isTeamMode">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>组队模式</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="juexing_label_propcount">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>设置樱饼数量:</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="yulingpage">
+     <attribute name="title">
+      <string>御灵</string>
+     </attribute>
+     <widget class="QWidget" name="gridLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>90</y>
+        <width>256</width>
+        <height>61</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="1" column="0">
+        <widget class="QCheckBox" name="yuling_isAddOtherOperations">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>添加随机操作(推荐)</string>
          </property>
          <property name="checked">
           <bool>true</bool>
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QRadioButton" name="resolution2">
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="yuling_editChallengetimes"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="yuling_label_challengetimes">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
          <property name="text">
-          <string>961*579(半屏)</string>
+          <string>设置挑战次数:</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="verticalLayoutWidget_3">
+      <property name="geometry">
+       <rect>
+        <x>330</x>
+        <y>60</y>
+        <width>119</width>
+        <height>141</height>
+       </rect>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_3">
+       <item>
+        <widget class="QPushButton" name="yuling_button_start">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>开始</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="yuling_button_pause">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>暂停</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="yuling_button_stop">
+         <property name="font">
+          <font>
+           <family>宋体</family>
+           <pointsize>11</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>停止</string>
          </property>
         </widget>
        </item>
@@ -248,8 +498,7 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:11pt;&quot;&gt;1.使用本程序时，请将界面调至挑战页面(组队页面)。&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:11pt;&quot;&gt;2.本程序不提供准备战斗功能，使用时请确保锁定阵容。&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:11pt;&quot;&gt;3.本程序运行过程中，阴阳师客户端会被锁定，期间无法拖动其他窗口。&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:11pt;&quot;&gt;4.使用本程序时，保持阴阳师客户端窗口距离屏幕边缘一定距离，否则程序报错(可使用qq或微信截图查看窗口是否在屏幕外)&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:11pt;&quot;&gt;5.按快捷键ctrl+Q可快速暂停本程序，以便操作其他窗口。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Ubuntu'; font-size:11pt;&quot;&gt;4.按快捷键ctrl+Q可快速暂停本程序，以便操作其他窗口。&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
     </widget>
@@ -280,8 +529,69 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'Ubuntu'; font-size:8pt;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
+   <widget class="QWidget" name="horizontalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>270</y>
+      <width>412</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLabel" name="resolution_label">
+       <property name="font">
+        <font>
+         <family>宋体</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>   分辨率:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="resolution1">
+       <property name="font">
+        <font>
+         <family>宋体</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>1440*849(默认)</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="resolution2">
+       <property name="font">
+        <font>
+         <family>宋体</family>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>961*579(推荐)</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
    <zorder>showInfoArea</zorder>
    <zorder>pages</zorder>
+   <zorder>horizontalLayoutWidget_3</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

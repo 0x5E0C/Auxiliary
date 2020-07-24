@@ -10,17 +10,24 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowFlags(0);
     setFixedSize(this->width(),this->height());
     setWindowTitle("辅助器");
-    View_Init();
+    viewInit();
     getSystemDPI();
-    connect(ui->chooseFloor,SIGNAL(currentIndexChanged(int)),this,SLOT(Change_challenge_mode(int)));
-    connect(ui->isTeamMode,SIGNAL(stateChanged(int)),this,SLOT(Change_team_mode(int)));
-    connect(ui->button_start,SIGNAL(clicked()),this,SLOT(Start()));
-    connect(ui->button_pause,SIGNAL(clicked()),this,SLOT(Pause()));
-    connect(ui->button_stop,SIGNAL(clicked()),this,SLOT(Stop()));
-    connect(hotkeymanager,SIGNAL(hotkeyevent()),this,SLOT(Pause()));
-    connect(promptmanager,SIGNAL(errorevent()),this,SLOT(Stop()));
+    connect(ui->yuhun_chooseFloor,SIGNAL(currentIndexChanged(int)),this,SLOT(changeChallengeMode(int)));
+    connect(ui->yuhun_isTeamMode,SIGNAL(stateChanged(int)),this,SLOT(changeTeamMode(int)));
+    connect(ui->yuhun_button_start,SIGNAL(clicked()),this,SLOT(start()));
+    connect(ui->yuhun_button_pause,SIGNAL(clicked()),this,SLOT(pause()));
+    connect(ui->yuhun_button_stop,SIGNAL(clicked()),this,SLOT(stop()));
+    connect(ui->juexing_isTeamMode,SIGNAL(stateChanged(int)),this,SLOT(changeTeamMode(int)));
+    connect(ui->juexing_button_start,SIGNAL(clicked()),this,SLOT(start()));
+    connect(ui->juexing_button_pause,SIGNAL(clicked()),this,SLOT(pause()));
+    connect(ui->juexing_button_stop,SIGNAL(clicked()),this,SLOT(stop()));
+    connect(ui->yuling_button_start,SIGNAL(clicked()),this,SLOT(start()));
+    connect(ui->yuling_button_pause,SIGNAL(clicked()),this,SLOT(pause()));
+    connect(ui->yuling_button_stop,SIGNAL(clicked()),this,SLOT(stop()));
+    connect(hotkeymanager,SIGNAL(hotkeyevent()),this,SLOT(pause()));
+    connect(promptmanager,SIGNAL(errorevent()),this,SLOT(stop()));
     connect(promptmanager,SIGNAL(updateShowArea(QString,int)),this,SLOT(addToShowArea(QString,int)));
-    connect(promptmanager,SIGNAL(finishevent()),this,SLOT(Stop()));
+    connect(promptmanager,SIGNAL(finishevent()),this,SLOT(stop()));
     connect(promptmanager,SIGNAL(updateUI(int,int)),this,SLOT(updateInfo(int,int)));
 }
 
@@ -30,32 +37,37 @@ MainWindow::~MainWindow()
 }
 
 /*函数功能:开启识别功能*/
-void MainWindow::Start()
+void MainWindow::start()
 {
-    if(Check())
+    if(check())
     {
         getWidgetsInfo();
-        ui->chooseFloor->setEnabled(false);
-        ui->isTeamMode->setEnabled(false);
-        ui->editPersonCount->setEnabled(false);
-        ui->editPropCount->setEnabled(false);
-        ui->editChallengetimes->setEnabled(false);
-        ui->isAddOtherOperations->setEnabled(false);
-        ui->button_start->setEnabled(false);
-        ui->resolution1->setEnabled(false);
-        ui->resolution2->setEnabled(false);
+        freezeUI();
         addToShowArea("即将开始!",INFO);
         addToShowArea("读取设置中...",INFO);
-        addToShowArea("已选择副本："+ui->chooseFloor->currentText(),INFO);
+        addToShowArea("已选择副本："+guiInfo.floortext,INFO);
+
         classifymanager=new classify();
         classifymanager->startTask();
+
     }
 }
 
 /*函数功能:暂停识别，不使能ui，防止误操作*/
-void MainWindow::Pause()
+void MainWindow::pause()
 {
-    ui->button_start->setEnabled(true);
+    if(freezeflag==C_YUHUN)
+    {
+        ui->yuhun_button_start->setEnabled(true);
+    }
+    else if(freezeflag==C_JUEXING)
+    {
+        ui->juexing_button_start->setEnabled(true);
+    }
+    else if(freezeflag==C_YULING)
+    {
+        ui->yuling_button_start->setEnabled(true);
+    }
     for(int i=0;i<process_count;i++)
     {
         *threadflaglist[i]=false;
@@ -64,13 +76,9 @@ void MainWindow::Pause()
 }
 
 /*函数功能:停止识别，使能ui*/
-void MainWindow::Stop()
+void MainWindow::stop()
 {
-    Change_challenge_mode(ui->chooseFloor->currentIndex());
-    ui->chooseFloor->setEnabled(true);
-    ui->button_start->setEnabled(true);
-    ui->resolution1->setEnabled(true);
-    ui->resolution2->setEnabled(true);
+    unfreezeUI();
     for(int i=0;i<process_count;i++)
     {
         *threadflaglist[i]=false;
@@ -78,43 +86,65 @@ void MainWindow::Stop()
 }
 
 /*函数功能:根据选择的层数改变ui*/
-void MainWindow::Change_challenge_mode(int floor)
+void MainWindow::changeChallengeMode(int floor)
 {
     if(floor==not_choose)
     {
-        setTeamModeEnbale(false);
-        setUsePropEnbale(false);
-        setChallengeTimesEnbale(false);
-        setAddOtherOperationsEnable(false);
+        setTeamModeEnbale(C_YUHUN,false);
+        ui->yuhun_label_propcount->setEnabled(false);
+        ui->yuhun_editPropCount->setEnabled(false);
+        ui->yuhun_label_challengetimes->setEnabled(false);
+        ui->yuhun_editChallengetimes->setEnabled(false);
+        ui->yuhun_isAddOtherOperations->setEnabled(false);
     }
     else if(floor==floor_1_10 || floor==floor_11 || floor==floor_rlzy1 || floor==floor_rlzy2 || floor==floor_rlzy3)
     {
-        setTeamModeEnbale(true);
-        setUsePropEnbale(true);
-        setChallengeTimesEnbale(false);
-        setAddOtherOperationsEnable(true);
+        setTeamModeEnbale(C_YUHUN,true);
+        ui->yuhun_label_propcount->setEnabled(true);
+        ui->yuhun_editPropCount->setEnabled(true);
+        ui->yuhun_label_challengetimes->setEnabled(false);
+        ui->yuhun_editChallengetimes->setEnabled(false);
+        ui->yuhun_isAddOtherOperations->setEnabled(true);
     }
     else if(floor==floor_tan || floor==floor_chen || floor==floor_chi)
     {
-        setTeamModeEnbale(false);
-        setUsePropEnbale(false);
-        setChallengeTimesEnbale(true);
-        setAddOtherOperationsEnable(true);
+        setTeamModeEnbale(C_YUHUN,false);
+        ui->yuhun_label_propcount->setEnabled(false);
+        ui->yuhun_editPropCount->setEnabled(false);
+        ui->yuhun_label_challengetimes->setEnabled(true);
+        ui->yuhun_editChallengetimes->setEnabled(true);
+        ui->yuhun_isAddOtherOperations->setEnabled(true);
     }
 }
 
 /*函数功能:根据是否选择组队模式改变ui*/
-void MainWindow::Change_team_mode(int state)
+void MainWindow::changeTeamMode(int state)
 {
-    if(state==Qt::Checked)
+    if(ui->pages->currentIndex()==C_YUHUN)
     {
-        ui->label_personcount->setEnabled(true);
-        ui->editPersonCount->setEnabled(true);
+        if(state==Qt::Checked)
+        {
+            ui->yuhun_label_personcount->setEnabled(true);
+            ui->yuhun_editPersonCount->setEnabled(true);
+        }
+        else if(state==Qt::Unchecked)
+        {
+            ui->yuhun_label_personcount->setEnabled(false);
+            ui->yuhun_editPersonCount->setEnabled(false);
+        }
     }
-    else if(state==Qt::Unchecked)
+    else if(ui->pages->currentIndex()==C_JUEXING)
     {
-        ui->label_personcount->setEnabled(false);
-        ui->editPersonCount->setEnabled(false);
+        if(state==Qt::Checked)
+        {
+            ui->juexing_label_personcount->setEnabled(true);
+            ui->juexing_editPersonCount->setEnabled(true);
+        }
+        else if(state==Qt::Unchecked)
+        {
+            ui->juexing_label_personcount->setEnabled(false);
+            ui->juexing_editPersonCount->setEnabled(false);
+        }
     }
 }
 
@@ -147,41 +177,73 @@ void MainWindow::showErrorWin(QString errinfo,int flag)
 }
 
 /*函数功能:检查ui交互数据*/
-bool MainWindow::Check()
+bool MainWindow::check()
 {
-    int person_count,prop_count,challengetimes,floor;
-    person_count=ui->editPersonCount->text().toInt();
-    prop_count=ui->editPropCount->text().toInt();
-    challengetimes=ui->editChallengetimes->text().toInt();
-    floor=ui->chooseFloor->currentIndex();
-    if(ui->chooseFloor->currentIndex()==not_choose)
+    if(ui->pages->currentIndex()==C_YUHUN)
     {
-        QMessageBox::critical(this,"错误","未选择副本!");
-        addToShowArea("错误：未选择副本!",ERR);
-        return false;
+        int person_count,prop_count,challengetimes,floor;
+        person_count=ui->yuhun_editPersonCount->text().toInt();
+        prop_count=ui->yuhun_editPropCount->text().toInt();
+        challengetimes=ui->yuhun_editChallengetimes->text().toInt();
+        floor=ui->yuhun_chooseFloor->currentIndex();
+        if(ui->yuhun_chooseFloor->currentIndex()==not_choose)
+        {
+            QMessageBox::critical(this,"错误","未选择副本!");
+            addToShowArea("错误：未选择副本!",ERR);
+            return false;
+        }
+        else
+        {
+            if(ui->yuhun_editPersonCount->isEnabled() && ui->yuhun_isTeamMode->checkState()==Qt::Checked && (person_count>3 || person_count<=1))
+            {
+                QMessageBox::critical(this,"错误","组队人数输入错误!");
+                addToShowArea("错误：组队人数输入应在1~3范围内!",ERR);
+                return false;
+            }
+            if((floor==floor_1_10 || floor==floor_11 || floor==floor_rlzy1 || floor==floor_rlzy2 || floor==floor_rlzy3) && ui->yuhun_editPropCount->isEnabled() && prop_count<=0)
+            {
+                QMessageBox::critical(this,"错误","樱饼数量输入错误!");
+                addToShowArea("错误：樱饼数量输入应大于0!",ERR);
+                return false;
+            }
+            if((floor==floor_tan || floor==floor_chen || floor==floor_chi) && ui->yuhun_editChallengetimes->isEnabled() && challengetimes<=0)
+            {
+                QMessageBox::critical(this,"错误","挑战次数输入错误!");
+                addToShowArea("错误：挑战次数输入应大于0!",ERR);
+                return false;
+            }
+        }
     }
-    else
+    else if(ui->pages->currentIndex()==C_JUEXING)
     {
-        if(ui->isTeamMode->isEnabled() && ui->isTeamMode->checkState()==Qt::Checked && (person_count>3 || person_count<=1))
+        int person_count,prop_count;
+        person_count=ui->juexing_editPersonCount->text().toInt();
+        prop_count=ui->juexing_editPropCount->text().toInt();
+        if(ui->juexing_isTeamMode->isEnabled() && ui->juexing_isTeamMode->checkState()==Qt::Checked && (person_count>3 || person_count<=1))
         {
             QMessageBox::critical(this,"错误","组队人数输入错误!");
             addToShowArea("错误：组队人数输入应在1~3范围内!",ERR);
             return false;
         }
-        if((floor==floor_1_10 || floor==floor_11 || floor==floor_rlzy1 || floor==floor_rlzy2 || floor==floor_rlzy3) && ui->editPropCount->isEnabled() && prop_count<=0)
+        if(prop_count<=0)
         {
             QMessageBox::critical(this,"错误","樱饼数量输入错误!");
             addToShowArea("错误：樱饼数量输入应大于0!",ERR);
             return false;
         }
-        if((floor==floor_tan || floor==floor_chen || floor==floor_chi) && ui->editChallengetimes->isEnabled() && challengetimes<=0)
+    }
+    else if(ui->pages->currentIndex()==C_YULING)
+    {
+        int challengetimes;
+        challengetimes=ui->yuling_editChallengetimes->text().toInt();
+        if(challengetimes<=0)
         {
             QMessageBox::critical(this,"错误","挑战次数输入错误!");
             addToShowArea("错误：挑战次数输入应大于0!",ERR);
             return false;
         }
-        return true;
     }
+    return true;
 }
 
 /*函数功能:获得当前时间，用于提示信息*/
@@ -192,110 +254,95 @@ QString MainWindow::getCurrenttime(QString pattern)
     return currenttime.toString(pattern);
 }
 
-/*函数功能:使能所有ui*/
-void MainWindow::View_Init()
+/*函数功能:初始化ui显示*/
+void MainWindow::viewInit()
 {
-    setTeamModeEnbale(false);
-    setUsePropEnbale(false);
-    setChallengeTimesEnbale(false);
-    setAddOtherOperationsEnable(false);
-    setButtomEnable(true);
-    ui->chooseFloor->setEnabled(true);
+    ui->yuhun_isTeamMode->setEnabled(false);
+    ui->yuhun_label_personcount->setEnabled(false);
+    ui->yuhun_editPersonCount->setEnabled(false);
+    ui->yuhun_label_propcount->setEnabled(false);
+    ui->yuhun_editPropCount->setEnabled(false);
+    ui->yuhun_label_challengetimes->setEnabled(false);
+    ui->yuhun_editChallengetimes->setEnabled(false);
+    ui->juexing_label_personcount->setEnabled(false);
+    ui->juexing_editPersonCount->setEnabled(false);
 }
 
-/*函数功能:失能所有ui*/
-void MainWindow::View_Deinit()
+/*函数功能:控制所有widget的状态*/
+void MainWindow::setAllWidgets(bool state)
 {
-    setTeamModeEnbale(false);
-    setUsePropEnbale(false);
-    setChallengeTimesEnbale(false);
-    setAddOtherOperationsEnable(false);
-    setButtomEnable(false);
-    ui->chooseFloor->setEnabled(false);
+    ui->yuhun_chooseFloor->setEnabled(state);
+    ui->yuhun_isTeamMode->setEnabled(state);
+    ui->yuhun_editPersonCount->setEnabled(state);
+    ui->yuhun_editPropCount->setEnabled(state);
+    ui->yuhun_editChallengetimes->setEnabled(state);
+    ui->yuhun_isAddOtherOperations->setEnabled(state);
+    ui->yuhun_button_start->setEnabled(state);
+    ui->yuhun_button_pause->setEnabled(state);
+    ui->yuhun_button_stop->setEnabled(state);
+    ui->juexing_isTeamMode->setEnabled(state);
+    ui->juexing_editPersonCount->setEnabled(state);
+    ui->juexing_editPropCount->setEnabled(state);
+    ui->juexing_button_start->setEnabled(state);
+    ui->juexing_button_pause->setEnabled(state);
+    ui->juexing_button_stop->setEnabled(state);
+    ui->yuling_editChallengetimes->setEnabled(state);
+    ui->yuling_isAddOtherOperations->setEnabled(state);
+    ui->yuling_button_start->setEnabled(state);
+    ui->yuling_button_pause->setEnabled(state);
+    ui->yuling_button_stop->setEnabled(state);
+    ui->resolution1->setEnabled(state);
+    ui->resolution2->setEnabled(state);
 }
 
 /*函数功能:控制组队相关ui*/
-void MainWindow::setTeamModeEnbale(bool state)
+void MainWindow::setTeamModeEnbale(int pages,bool state)
 {
     if(state)
     {
-        ui->isTeamMode->setEnabled(true);
-        if(ui->isTeamMode->checkState()==Qt::Checked)
+        if(pages==C_YUHUN)
         {
-            ui->label_personcount->setEnabled(true);
-            ui->editPersonCount->setEnabled(true);
+            ui->yuhun_isTeamMode->setEnabled(true);
+            if(ui->yuhun_isTeamMode->checkState()==Qt::Checked)
+            {
+                ui->yuhun_label_personcount->setEnabled(true);
+                ui->yuhun_editPersonCount->setEnabled(true);
+            }
+            else if(ui->yuhun_isTeamMode->checkState()==Qt::Unchecked)
+            {
+                ui->yuhun_label_personcount->setEnabled(false);
+                ui->yuhun_editPersonCount->setEnabled(false);
+            }
         }
-        else if(ui->isTeamMode->checkState()==Qt::Unchecked)
+        else if(pages==C_JUEXING)
         {
-            ui->label_personcount->setEnabled(false);
-            ui->editPersonCount->setEnabled(false);
+            ui->juexing_isTeamMode->setEnabled(true);
+            if(ui->juexing_isTeamMode->checkState()==Qt::Checked)
+            {
+                ui->juexing_label_personcount->setEnabled(true);
+                ui->juexing_editPersonCount->setEnabled(true);
+            }
+            else if(ui->juexing_isTeamMode->checkState()==Qt::Unchecked)
+            {
+                ui->juexing_label_personcount->setEnabled(false);
+                ui->juexing_editPersonCount->setEnabled(false);
+            }
         }
     }
     else
     {
-        ui->isTeamMode->setEnabled(false);
-        ui->label_personcount->setEnabled(false);
-        ui->editPersonCount->setEnabled(false);
-    }
-}
-
-/*函数功能:控制樱饼相关ui*/
-void MainWindow::setUsePropEnbale(bool state)
-{
-    if(state)
-    {
-        ui->label_propcount->setEnabled(true);
-        ui->editPropCount->setEnabled(true);
-    }
-    else
-    {
-        ui->label_propcount->setEnabled(false);
-        ui->editPropCount->setEnabled(false);
-    }
-}
-
-/*函数功能:控制次数相关ui*/
-void MainWindow::setChallengeTimesEnbale(bool state)
-{
-    if(state)
-    {
-        ui->label_challengetimes->setEnabled(true);
-        ui->editChallengetimes->setEnabled(true);
-    }
-    else
-    {
-        ui->label_challengetimes->setEnabled(false);
-        ui->editChallengetimes->setEnabled(false);
-    }
-}
-
-/*函数功能:控制添加其他操作相关ui*/
-void MainWindow::setAddOtherOperationsEnable(bool state)
-{
-    if(state)
-    {
-        ui->isAddOtherOperations->setEnabled(true);
-    }
-    else
-    {
-        ui->isAddOtherOperations->setEnabled(false);
-    }
-}
-
-/*函数功能:控制按钮相关ui*/
-void MainWindow::setButtomEnable(bool state)
-{
-    if(state)
-    {
-        ui->button_start->setEnabled(true);
-        ui->button_pause->setEnabled(true);
-        ui->button_stop->setEnabled(true);
-    }
-    else
-    {
-        ui->button_start->setEnabled(false);
-        ui->button_pause->setEnabled(false);
-        ui->button_stop->setEnabled(false);
+        if(pages==C_YUHUN)
+        {
+            ui->yuhun_isTeamMode->setEnabled(false);
+            ui->yuhun_label_personcount->setEnabled(false);
+            ui->yuhun_editPersonCount->setEnabled(false);
+        }
+        else if(pages==C_JUEXING)
+        {
+            ui->juexing_isTeamMode->setEnabled(false);
+            ui->juexing_label_personcount->setEnabled(false);
+            ui->juexing_editPersonCount->setEnabled(false);
+        }
     }
 }
 
@@ -303,41 +350,6 @@ void MainWindow::setButtomEnable(bool state)
 void MainWindow::getWidgetsInfo()
 {
     guiInfo.challengetype=ui->pages->currentIndex();
-    guiInfo.mfloor=ui->chooseFloor->currentIndex();
-    if(ui->isTeamMode->isChecked() && ui->isTeamMode->isEnabled())
-    {
-        guiInfo.isteam=true;
-        guiInfo.person=ui->editPersonCount->text().toInt();
-    }
-    else
-    {
-        guiInfo.isteam=false;
-        guiInfo.person=-1;
-    }
-    if(ui->editPropCount->isEnabled())
-    {
-        guiInfo.propcount=ui->editPropCount->text().toInt();
-    }
-    else
-    {
-        guiInfo.propcount=-1;
-    }
-    if(ui->editChallengetimes->isEnabled())
-    {
-        guiInfo.challengetimes=ui->editChallengetimes->text().toInt();
-    }
-    else
-    {
-        guiInfo.challengetimes=-1;
-    }
-    if(ui->isAddOtherOperations->isChecked())
-    {
-        guiInfo.addoperations=true;
-    }
-    else
-    {
-        guiInfo.addoperations=false;
-    }
     if(ui->resolution1->isChecked())
     {
         guiInfo.resolution="1440849";
@@ -348,7 +360,88 @@ void MainWindow::getWidgetsInfo()
         guiInfo.resolution="961579";
         guiInfo.winheight=579;
     }
-    guiInfo.floortext=ui->chooseFloor->currentText();
+    if(ui->pages->currentIndex()==C_YUHUN)
+    {
+        guiInfo.mfloor=ui->yuhun_chooseFloor->currentIndex();
+        if(ui->yuhun_isTeamMode->isChecked() && ui->yuhun_isTeamMode->isEnabled())
+        {
+            guiInfo.isteam=true;
+            guiInfo.person=ui->yuhun_editPersonCount->text().toInt();
+        }
+        else
+        {
+            guiInfo.isteam=false;
+            guiInfo.person=-1;
+        }
+        if(ui->yuhun_editPropCount->isEnabled())
+        {
+            guiInfo.propcount=ui->yuhun_editPropCount->text().toInt();
+        }
+        else
+        {
+            guiInfo.propcount=-1;
+        }
+        if(ui->yuhun_editChallengetimes->isEnabled())
+        {
+            guiInfo.challengetimes=ui->yuhun_editChallengetimes->text().toInt();
+        }
+        else
+        {
+            guiInfo.challengetimes=-1;
+        }
+        if(ui->yuhun_isAddOtherOperations->isChecked())
+        {
+            guiInfo.addoperations=true;
+        }
+        else
+        {
+            guiInfo.addoperations=false;
+        }
+        guiInfo.floortext=ui->yuhun_chooseFloor->currentText();
+    }
+    else if(ui->pages->currentIndex()==C_JUEXING)
+    {
+        if(ui->juexing_isTeamMode->isChecked() && ui->juexing_isTeamMode->isEnabled())
+        {
+            guiInfo.isteam=true;
+            guiInfo.person=ui->juexing_editPersonCount->text().toInt();
+        }
+        else
+        {
+            guiInfo.isteam=false;
+            guiInfo.person=-1;
+        }
+        if(ui->juexing_editPropCount->isEnabled())
+        {
+            guiInfo.propcount=ui->juexing_editPropCount->text().toInt();
+        }
+        else
+        {
+            guiInfo.propcount=-1;
+        }
+        guiInfo.floortext="觉醒";
+    }
+    else if(ui->pages->currentIndex()==C_YULING)
+    {
+        if(ui->yuling_editChallengetimes->isEnabled())
+        {
+            guiInfo.challengetimes=ui->yuling_editChallengetimes->text().toInt();
+        }
+        else
+        {
+            guiInfo.challengetimes=-1;
+        }
+        if(ui->yuling_isAddOtherOperations->isChecked())
+        {
+            guiInfo.addoperations=true;
+        }
+        else
+        {
+            guiInfo.addoperations=false;
+        }
+        guiInfo.isteam=false;
+        guiInfo.floortext="御灵";
+    }
 }
 
 /*函数功能:获取系统dpi*/
@@ -379,20 +472,54 @@ void MainWindow::getSystemDPI()
         break;
     default:
         showErrorWin("程序不支持当前显示比例,建议调至(100%或125%)!\n详情请查看帮助或帮助文档!");
-        View_Deinit();
+        setAllWidgets(false);
         break;
     }
 }
 
-//更新挑战次数/樱饼数量的QLineEdit显示
+/*函数功能:更新挑战次数/樱饼数量的QLineEdit显示*/
 void MainWindow::updateInfo(int mode,int info)
 {
     if(mode==TIMES_TYPE)
     {
-        ui->editChallengetimes->setText(QString::number(info));
+        ui->yuhun_editChallengetimes->setText(QString::number(info));
     }
     else if(mode==PROPS_TYPE)
     {
-        ui->editPropCount->setText(QString::number(info));
+        ui->yuhun_editPropCount->setText(QString::number(info));
     }
+}
+
+/*函数功能:冻结部分UI*/
+void MainWindow::freezeUI()
+{
+    setAllWidgets(false);
+    switch(ui->pages->currentIndex())
+    {
+    case C_YUHUN:
+        freezeflag=C_YUHUN;
+        ui->yuhun_button_pause->setEnabled(true);
+        ui->yuhun_button_stop->setEnabled(true);
+        break;
+    case C_JUEXING:
+        freezeflag=C_JUEXING;
+        ui->juexing_button_pause->setEnabled(true);
+        ui->juexing_button_stop->setEnabled(true);
+        break;
+    case C_YULING:
+        freezeflag=C_YULING;
+        ui->yuling_button_pause->setEnabled(true);
+        ui->yuling_button_stop->setEnabled(true);
+        break;
+    default:
+        break;
+    }
+}
+
+/*函数功能:解冻部分UI*/
+void MainWindow::unfreezeUI()
+{
+    setAllWidgets(true);
+    changeChallengeMode(ui->yuhun_chooseFloor->currentIndex());
+    setTeamModeEnbale(C_JUEXING,true);
 }

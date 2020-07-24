@@ -41,9 +41,9 @@ bool match::matchStrength(int mode)
 }
 
 /*函数功能:判断当前界面挑战券符合选定层数对应的挑战券*/
-bool match::matchProp()
+bool match::matchProp(int mode)
 {
-    if(compareResult(getScreenshot(0.8,1,0.8,1),yyh_mode)==guiInfo.matchtarget)
+    if(compareResult(getScreenshot(0.8,1,0.8,1),mode)==guiInfo.matchtarget)
     {
         return true;
     }
@@ -51,6 +51,15 @@ bool match::matchProp()
     {
         return false;
     }
+}
+
+bool match::matchLeader()
+{
+    if(matchTemplateAndGetValue("leaderflag1.png",getScreenshot(0.85,1,0.75,1))>0.9 || matchTemplateAndGetValue("leaderflag2.png",getScreenshot(0.85,1,0.75,1))>0.9)
+    {
+        return true;
+    }
+    return false;
 }
 
 /*函数功能:返回最符合的结果*/
@@ -88,6 +97,35 @@ int match::compareResult(Mat img,int mode)
             return 0;
         }
     }
+    else if(mode==team_mode)
+    {
+        oldlist.append(matchTemplateAndGetValue("team_4.png",img));
+        oldlist.append(matchTemplateAndGetValue("team_6.png",img));
+        oldlist.append(matchTemplateAndGetValue("team_8.png",img));
+        resultlist=oldlist;
+        std::sort(resultlist.begin(),resultlist.end());
+        mostmatch=resultlist.at(resultlist.size()-1);
+        if(mostmatch>0.9)
+        {
+            index=oldlist.indexOf(mostmatch);
+            if(index==0)
+            {
+                return 4;
+            }
+            else if(index==1)
+            {
+                return 6;
+            }
+            else if(index==2)
+            {
+                return 8;
+            }
+        }
+        else
+        {
+            return 0;
+        }
+    }
     else if(mode==yyh_mode)
     {
         oldlist.append(matchTemplateAndGetValue("tan.png",img));
@@ -117,34 +155,18 @@ int match::compareResult(Mat img,int mode)
             return 0;
         }
     }
-    else if(mode==team_mode)
+    else if(mode==yuling_mode)
     {
-        oldlist.append(matchTemplateAndGetValue("team_4.png",img));
-        oldlist.append(matchTemplateAndGetValue("team_6.png",img));
-        oldlist.append(matchTemplateAndGetValue("team_8.png",img));
-        resultlist=oldlist;
-        std::sort(resultlist.begin(),resultlist.end());
-        mostmatch=resultlist.at(resultlist.size()-1);
-        if(mostmatch>0.9)
+        if(matchTemplateAndGetValue("yuling.png",img)>0.8)
         {
-            index=oldlist.indexOf(mostmatch);
-            if(index==0)
-            {
-                return 4;
-            }
-            else if(index==1)
-            {
-                return 6;
-            }
-            else if(index==2)
-            {
-                return 8;
-            }
+            return -4;
         }
         else
         {
             return 0;
         }
+
+        return 0;
     }
     else if(mode==prepare_mode)
     {

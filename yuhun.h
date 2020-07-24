@@ -14,8 +14,8 @@ class yuhun : public QThread
     Q_OBJECT
 public:
     bool runflag;
+    bool is_leader_thread;
     bool is_update_ui_thread;
-    yuhun();
     yuhun(HWND hwnd,int mode,int threadid);
     void startTask();
 

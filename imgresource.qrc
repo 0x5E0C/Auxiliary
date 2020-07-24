@@ -25,6 +25,7 @@
         <file>1440849/prize.png</file>
         <file>1440849/leaderflag1.png</file>
         <file>1440849/leaderflag2.png</file>
+        <file>1440849/yuling.png</file>
     </qresource>
     <qresource prefix="/961579">
         <file>961579/chat.png</file>
@@ -52,5 +53,6 @@
         <file>961579/prize.png</file>
         <file>961579/leaderflag1.png</file>
         <file>961579/leaderflag2.png</file>
+        <file>961579/yuling.png</file>
     </qresource>
 </RCC>

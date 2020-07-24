@@ -4,6 +4,8 @@
 #include <QObject>
 #include "config.h"
 #include "yuhun.h"
+#include "juexing.h"
+#include "yuling.h"
 #include "prompt.h"
 
 extern bool *threadflaglist[MAX_PROCESS_COUNT];
