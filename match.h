@@ -16,7 +16,8 @@ class match
 public:
     match(HWND hwnd,control *ctrler);
     bool matchStrength(int mode);
-    bool matchProp();
+    bool matchProp(int mode);
+    bool matchLeader();
     int compareResult(Mat img,int mode);
     void matchTemplateAndReturnPos(QString filename,Mat target,int *x,int *y);
     double matchTemplateAndGetValue(QString filename,Mat target);

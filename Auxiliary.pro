@@ -21,12 +21,14 @@ SOURCES += \
     counter.cpp \
     delay.cpp \
     hotkey.cpp \
+    juexing.cpp \
     main.cpp \
     mainwindow.cpp \
     match.cpp \
     operations.cpp \
     prompt.cpp \
-    yuhun.cpp
+    yuhun.cpp \
+    yuling.cpp
 
 HEADERS += \
     Auxiliary.rc \
@@ -36,11 +38,13 @@ HEADERS += \
     counter.h \
     delay.h \
     hotkey.h \
+    juexing.h \
     mainwindow.h \
     match.h \
     operations.h \
     prompt.h \
-    yuhun.h
+    yuhun.h \
+    yuling.h
 
 FORMS += \
     mainwindow.ui
