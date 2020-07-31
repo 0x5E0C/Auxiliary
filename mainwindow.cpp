@@ -28,7 +28,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(promptmanager,SIGNAL(errorevent()),this,SLOT(stop()));
     connect(promptmanager,SIGNAL(updateShowArea(QString,int)),this,SLOT(addToShowArea(QString,int)));
     connect(promptmanager,SIGNAL(finishevent()),this,SLOT(stop()));
-    connect(promptmanager,SIGNAL(updateUI(int,int)),this,SLOT(updateInfo(int,int)));
+    connect(promptmanager,SIGNAL(updateUI(int,int,int)),this,SLOT(updateInfo(int,int,int)));
 }
 
 MainWindow::~MainWindow()
@@ -478,15 +478,29 @@ void MainWindow::getSystemDPI()
 }
 
 /*函数功能:更新挑战次数/樱饼数量的QLineEdit显示*/
-void MainWindow::updateInfo(int mode,int info)
+void MainWindow::updateInfo(int mode,int info,int flag)
 {
     if(mode==TIMES_TYPE)
     {
-        ui->yuhun_editChallengetimes->setText(QString::number(info));
+        if(flag==C_YUHUN)
+        {
+            ui->yuhun_editChallengetimes->setText(QString::number(info));
+        }
+        else if(flag==C_YULING)
+        {
+            ui->yuling_editChallengetimes->setText(QString::number(info));
+        }
     }
     else if(mode==PROPS_TYPE)
     {
-        ui->yuhun_editPropCount->setText(QString::number(info));
+        if(flag==C_YUHUN)
+        {
+            ui->yuhun_editPropCount->setText(QString::number(info));
+        }
+        else if(flag==C_YULING)
+        {
+            ui->juexing_editPropCount->setText(QString::number(info));
+        }
     }
 }
 

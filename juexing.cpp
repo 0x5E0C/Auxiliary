@@ -33,7 +33,7 @@ void juexing::startTask()
         {
             if(is_update_ui_thread)
             {
-                emit promptmanager->updateUI(PROPS_TYPE,countermanager->getProps());
+                emit promptmanager->updateUI(PROPS_TYPE,countermanager->getProps(),C_JUEXING);
             }
             emit promptmanager->updateShowArea("窗口"+QString::number(id)+":"+"剩余樱饼数量"+QString::number(countermanager->getProps()),INFO);
         }

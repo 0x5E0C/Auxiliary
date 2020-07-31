@@ -17,7 +17,7 @@ signals:
     void updateShowArea(QString info,int infotype);
     void errorevent();
     void finishevent();
-    void updateUI(int mode,int info);
+    void updateUI(int mode,int info,int flag);
 };
 
 #endif // PROMPT_H

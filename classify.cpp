@@ -80,6 +80,7 @@ void classify::startSingleModeMatch()
             threadflaglist[i]=&(yulingmanager->runflag);
             yuling_updateUIThread=yulingmanager;
         }
+        yuling_updateUIThread->is_update_ui_thread=true;
         break;
     default:
         break;

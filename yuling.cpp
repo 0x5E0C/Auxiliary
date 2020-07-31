@@ -30,7 +30,7 @@ void yuling::startTask()
         {
             if(is_update_ui_thread)
             {
-                emit promptmanager->updateUI(TIMES_TYPE,countermanager->getTimes());
+                emit promptmanager->updateUI(TIMES_TYPE,countermanager->getTimes(),C_YULING);
             }
             emit promptmanager->updateShowArea("窗口"+QString::number(id)+":"+"开始第"+QString::number(guiInfo.challengetimes-countermanager->getTimes())+"次挑战",INFO);
         }

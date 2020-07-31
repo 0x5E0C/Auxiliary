@@ -45,6 +45,6 @@ private slots:
     void changeTeamMode(int state);
     void addToShowArea(QString info,int infotype);
     void showErrorWin(QString errinfo,int flag=NO_KILL_PROCESS);
-    void updateInfo(int mode,int info);
+    void updateInfo(int mode,int info,int flag);
 };
 #endif // MAINWINDOW_H

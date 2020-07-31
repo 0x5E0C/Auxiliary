@@ -54,7 +54,7 @@ void yuhun::startTask()
             {
                 if(is_update_ui_thread)
                 {
-                    emit promptmanager->updateUI(TIMES_TYPE,countermanager->getTimes());
+                    emit promptmanager->updateUI(TIMES_TYPE,countermanager->getTimes(),C_YUHUN);
                 }
                 emit promptmanager->updateShowArea("窗口"+QString::number(id)+":"+"开始第"+QString::number(guiInfo.challengetimes-countermanager->getTimes())+"次挑战",INFO);
             }
@@ -76,7 +76,7 @@ void yuhun::startTask()
             {
                 if(is_update_ui_thread)
                 {
-                    emit promptmanager->updateUI(PROPS_TYPE,countermanager->getProps());
+                    emit promptmanager->updateUI(PROPS_TYPE,countermanager->getProps(),C_YUHUN);
                 }
                 emit promptmanager->updateShowArea("窗口"+QString::number(id)+":"+"剩余樱饼数量"+QString::number(countermanager->getProps()),INFO);
             }
