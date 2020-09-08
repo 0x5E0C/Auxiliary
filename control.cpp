@@ -35,10 +35,6 @@ bool control::adjustWindowsSize(int h)
         {
             return true;
         }
-        else
-        {
-            return false;
-        }
     }
     return false;
 }

@@ -10,15 +10,19 @@ public:
     counter();
     void decreaseTimes();
     void decreaseProps();
+    void increaseJieJieProps(int count);
     int getTimes();
     int getProps();
+    int getJieJieProp();
     void setTimes(int t);
     void setProps(int p);
+    void setJieJieProps(int jp);
     int getType();
 
 private:
     int times;
     int props;
+    int jiejieprop;
     int type;
 };
 

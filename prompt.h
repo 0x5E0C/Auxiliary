@@ -16,6 +16,7 @@ public:
 signals:
     void updateShowArea(QString info,int infotype);
     void errorevent();
+    void failevent();
     void finishevent();
     void updateUI(int mode,int info,int flag);
 };
