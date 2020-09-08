@@ -22,10 +22,17 @@
         <file>1440849/unprepare.png</file>
         <file>1440849/world.png</file>
         <file>1440849/victory.png</file>
-        <file>1440849/prize.png</file>
         <file>1440849/leaderflag1.png</file>
         <file>1440849/leaderflag2.png</file>
         <file>1440849/yuling.png</file>
+        <file>1440849/gold2w.png</file>
+        <file>1440849/gold3w.png</file>
+        <file>1440849/magatama30.png</file>
+        <file>1440849/strength30.png</file>
+        <file>1440849/fail.png</file>
+        <file>1440849/prize.png</file>
+        <file>1440849/jiejieprop.png</file>
+        <file>1440849/mask.png</file>
     </qresource>
     <qresource prefix="/961579">
         <file>961579/chat.png</file>
@@ -50,9 +57,16 @@
         <file>961579/world.png</file>
         <file>961579/unprepare.png</file>
         <file>961579/victory.png</file>
-        <file>961579/prize.png</file>
         <file>961579/leaderflag1.png</file>
         <file>961579/leaderflag2.png</file>
         <file>961579/yuling.png</file>
+        <file>961579/gold2w.png</file>
+        <file>961579/gold3w.png</file>
+        <file>961579/magatama30.png</file>
+        <file>961579/strength30.png</file>
+        <file>961579/fail.png</file>
+        <file>961579/prize.png</file>
+        <file>961579/jiejieprop.png</file>
+        <file>961579/mask.png</file>
     </qresource>
 </RCC>

@@ -10,6 +10,7 @@
 #include "hotkey.h"
 #include "match.h"
 #include "prompt.h"
+#include "setting.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -25,12 +26,14 @@ public:
     void setTeamModeEnbale(int pages,bool state);
     bool check();
     void getWidgetsInfo();
-    void getSystemDPI();
+    void getAppDPI();
 
 private:
     Ui::MainWindow *ui;
+    setting *settingwindows=new setting();
     classify *classifymanager;
     int freezeflag;
+    bool startflag=false;
     void setAllWidgets(bool state);
     QString getCurrenttime(QString pattern);
     void freezeUI();
@@ -46,5 +49,7 @@ private slots:
     void addToShowArea(QString info,int infotype);
     void showErrorWin(QString errinfo,int flag=NO_KILL_PROCESS);
     void updateInfo(int mode,int info,int flag);
+    void openSettingPage();
+    void getSettingInfo(QVector<quint8> infolist);
 };
 #endif // MAINWINDOW_H

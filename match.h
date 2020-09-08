@@ -18,11 +18,13 @@ public:
     bool matchStrength(int mode);
     bool matchProp(int mode);
     bool matchLeader();
+    quint8 matchCooperation();
     int compareResult(Mat img,int mode);
-    void matchTemplateAndReturnPos(QString filename,Mat target,int *x,int *y);
+    void matchTemplateAndReturnPos(QString filename,Mat target,int *x,int *y,bool centermode=true);
     double matchTemplateAndGetValue(QString filename,Mat target);
-    int checkPersonCount();
-    Mat getScreenshot(float l,float r,float t,float b);
+    quint8 checkPersonCount();
+    quint8 getMatchedJieJiePropsCount(Mat img);
+    Mat getScreenshot(float l=0,float r=1,float t=0,float b=1,bool gray=true);
     QString getImgPath(QString filename);
     Mat imread(QString filepath,int flag=IMREAD_GRAYSCALE);
 

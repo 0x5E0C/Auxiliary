@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     setFixedSize(this->width(),this->height());
     setWindowTitle("辅助器");
     viewInit();
-    getSystemDPI();
+    getAppDPI();
     connect(ui->yuhun_chooseFloor,SIGNAL(currentIndexChanged(int)),this,SLOT(changeChallengeMode(int)));
     connect(ui->yuhun_isTeamMode,SIGNAL(stateChanged(int)),this,SLOT(changeTeamMode(int)));
     connect(ui->yuhun_button_start,SIGNAL(clicked()),this,SLOT(start()));
@@ -24,11 +24,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->yuling_button_start,SIGNAL(clicked()),this,SLOT(start()));
     connect(ui->yuling_button_pause,SIGNAL(clicked()),this,SLOT(pause()));
     connect(ui->yuling_button_stop,SIGNAL(clicked()),this,SLOT(stop()));
+    connect(ui->button_open_setting,SIGNAL(clicked()),this,SLOT(openSettingPage()));
+    connect(settingwindows,SIGNAL(destroywindows(QVector<quint8>)),this,SLOT(getSettingInfo(QVector<quint8>)));
     connect(hotkeymanager,SIGNAL(hotkeyevent()),this,SLOT(pause()));
     connect(promptmanager,SIGNAL(errorevent()),this,SLOT(stop()));
     connect(promptmanager,SIGNAL(updateShowArea(QString,int)),this,SLOT(addToShowArea(QString,int)));
     connect(promptmanager,SIGNAL(finishevent()),this,SLOT(stop()));
     connect(promptmanager,SIGNAL(updateUI(int,int,int)),this,SLOT(updateInfo(int,int,int)));
+    connect(promptmanager,SIGNAL(failevent()),this,SLOT(stop()));
+    settingwindows->loadSettingInfo();
 }
 
 MainWindow::~MainWindow()
@@ -41,12 +45,13 @@ void MainWindow::start()
 {
     if(check())
     {
+        startflag=true;
         getWidgetsInfo();
         freezeUI();
+        settingwindows->freezeUI();
         addToShowArea("即将开始!",INFO);
         addToShowArea("读取设置中...",INFO);
         addToShowArea("已选择副本："+guiInfo.floortext,INFO);
-
         classifymanager=new classify();
         classifymanager->startTask();
 
@@ -56,6 +61,8 @@ void MainWindow::start()
 /*函数功能:暂停识别，不使能ui，防止误操作*/
 void MainWindow::pause()
 {
+    startflag=false;
+    settingwindows->unfreezeUI();
     if(freezeflag==C_YUHUN)
     {
         ui->yuhun_button_start->setEnabled(true);
@@ -78,7 +85,16 @@ void MainWindow::pause()
 /*函数功能:停止识别，使能ui*/
 void MainWindow::stop()
 {
+    if(startflag)
+    {
+        if(guiInfo.popupstop)
+        {
+            QMessageBox::information(this,"提示","程序已停止!");
+        }
+    }
+    startflag=false;
     unfreezeUI();
+    settingwindows->unfreezeUI();
     for(int i=0;i<process_count;i++)
     {
         *threadflaglist[i]=false;
@@ -95,7 +111,6 @@ void MainWindow::changeChallengeMode(int floor)
         ui->yuhun_editPropCount->setEnabled(false);
         ui->yuhun_label_challengetimes->setEnabled(false);
         ui->yuhun_editChallengetimes->setEnabled(false);
-        ui->yuhun_isAddOtherOperations->setEnabled(false);
     }
     else if(floor==floor_1_10 || floor==floor_11 || floor==floor_rlzy1 || floor==floor_rlzy2 || floor==floor_rlzy3)
     {
@@ -104,7 +119,6 @@ void MainWindow::changeChallengeMode(int floor)
         ui->yuhun_editPropCount->setEnabled(true);
         ui->yuhun_label_challengetimes->setEnabled(false);
         ui->yuhun_editChallengetimes->setEnabled(false);
-        ui->yuhun_isAddOtherOperations->setEnabled(true);
     }
     else if(floor==floor_tan || floor==floor_chen || floor==floor_chi)
     {
@@ -113,7 +127,6 @@ void MainWindow::changeChallengeMode(int floor)
         ui->yuhun_editPropCount->setEnabled(false);
         ui->yuhun_label_challengetimes->setEnabled(true);
         ui->yuhun_editChallengetimes->setEnabled(true);
-        ui->yuhun_isAddOtherOperations->setEnabled(true);
     }
 }
 
@@ -276,7 +289,6 @@ void MainWindow::setAllWidgets(bool state)
     ui->yuhun_editPersonCount->setEnabled(state);
     ui->yuhun_editPropCount->setEnabled(state);
     ui->yuhun_editChallengetimes->setEnabled(state);
-    ui->yuhun_isAddOtherOperations->setEnabled(state);
     ui->yuhun_button_start->setEnabled(state);
     ui->yuhun_button_pause->setEnabled(state);
     ui->yuhun_button_stop->setEnabled(state);
@@ -287,12 +299,9 @@ void MainWindow::setAllWidgets(bool state)
     ui->juexing_button_pause->setEnabled(state);
     ui->juexing_button_stop->setEnabled(state);
     ui->yuling_editChallengetimes->setEnabled(state);
-    ui->yuling_isAddOtherOperations->setEnabled(state);
     ui->yuling_button_start->setEnabled(state);
     ui->yuling_button_pause->setEnabled(state);
     ui->yuling_button_stop->setEnabled(state);
-    ui->resolution1->setEnabled(state);
-    ui->resolution2->setEnabled(state);
 }
 
 /*函数功能:控制组队相关ui*/
@@ -350,16 +359,6 @@ void MainWindow::setTeamModeEnbale(int pages,bool state)
 void MainWindow::getWidgetsInfo()
 {
     guiInfo.challengetype=ui->pages->currentIndex();
-    if(ui->resolution1->isChecked())
-    {
-        guiInfo.resolution="1440849";
-        guiInfo.winheight=849;
-    }
-    else if(ui->resolution2->isChecked())
-    {
-        guiInfo.resolution="961579";
-        guiInfo.winheight=579;
-    }
     if(ui->pages->currentIndex()==C_YUHUN)
     {
         guiInfo.mfloor=ui->yuhun_chooseFloor->currentIndex();
@@ -388,14 +387,6 @@ void MainWindow::getWidgetsInfo()
         else
         {
             guiInfo.challengetimes=-1;
-        }
-        if(ui->yuhun_isAddOtherOperations->isChecked())
-        {
-            guiInfo.addoperations=true;
-        }
-        else
-        {
-            guiInfo.addoperations=false;
         }
         guiInfo.floortext=ui->yuhun_chooseFloor->currentText();
     }
@@ -431,25 +422,17 @@ void MainWindow::getWidgetsInfo()
         {
             guiInfo.challengetimes=-1;
         }
-        if(ui->yuling_isAddOtherOperations->isChecked())
-        {
-            guiInfo.addoperations=true;
-        }
-        else
-        {
-            guiInfo.addoperations=false;
-        }
         guiInfo.isteam=false;
         guiInfo.floortext="御灵";
     }
 }
 
 /*函数功能:获取系统dpi*/
-void MainWindow::getSystemDPI()
+void MainWindow::getAppDPI()
 {
 
-    HDC desktopDc = GetDC(NULL);
-    int verticalDPI = GetDeviceCaps(desktopDc,LOGPIXELSY);
+    HDC appDc = GetDC(FindWindowEx(NULL,NULL,NULL,title.toLocal8Bit()));
+    int verticalDPI = GetDeviceCaps(appDc,LOGPIXELSY);
     switch (verticalDPI)
     {
     case 96:
@@ -497,11 +480,43 @@ void MainWindow::updateInfo(int mode,int info,int flag)
         {
             ui->yuhun_editPropCount->setText(QString::number(info));
         }
-        else if(flag==C_YULING)
+        else if(flag==C_JUEXING)
         {
             ui->juexing_editPropCount->setText(QString::number(info));
         }
     }
+}
+
+/*函数功能:打开设置界面*/
+void MainWindow::openSettingPage()
+{
+    settingwindows->setWindowTitle("设置");
+    settingwindows->show();
+}
+
+/*函数功能:获取设置界面参数*/
+void MainWindow::getSettingInfo(QVector<quint8> infolist)
+{
+    if(infolist[index_resolution]==1)
+    {
+        guiInfo.resolution="1440849";
+        guiInfo.winheight=849;
+    }
+    else if(infolist[index_resolution]==2)
+    {
+        guiInfo.resolution="961579";
+        guiInfo.winheight=579;
+    }
+    guiInfo.magatama30=infolist[index_magatama30];
+    guiInfo.strength30=infolist[index_strength30];
+    guiInfo.gold2w=infolist[index_gold2w];
+    guiInfo.gold3w=infolist[index_gold3w];
+    guiInfo.autoprepare=infolist[index_autoprepare];
+    guiInfo.addoperations=infolist[index_otheroperations];
+    guiInfo.failstop=infolist[index_failstop];
+    guiInfo.stopwhenlimit=infolist[index_stopwhenlimit];
+    guiInfo.jiejiepropcount=infolist[index_jiejiepropcount];
+    guiInfo.popupstop=infolist[index_popupwhenstop];
 }
 
 /*函数功能:冻结部分UI*/
@@ -537,3 +552,4 @@ void MainWindow::unfreezeUI()
     changeChallengeMode(ui->yuhun_chooseFloor->currentIndex());
     setTeamModeEnbale(C_JUEXING,true);
 }
+

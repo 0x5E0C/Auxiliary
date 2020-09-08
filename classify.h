@@ -17,11 +17,20 @@ extern struct guichoose{
     int person;
     int propcount;
     int challengetimes;
-    bool addoperations;
     QString resolution;
     int winheight;
     int matchtarget;
     QString floortext;
+    bool magatama30;
+    bool strength30;
+    bool gold2w;
+    bool gold3w;
+    bool autoprepare;
+    bool addoperations;
+    bool failstop;
+    bool stopwhenlimit;
+    qint8 jiejiepropcount;
+    bool popupstop;
 } guiInfo;
 
 extern struct pos
@@ -38,6 +47,11 @@ extern struct pos
             double xpos;
             double ypos;
         } team_challenge_pos;
+        struct prepare_pos
+        {
+            double xpos;
+            double ypos;
+        }prepare_pos;
         struct friend_pos
         {
             double xpos;
@@ -54,6 +68,19 @@ extern struct pos
             double ypos;
         } finish_pos;
     }common;
+    struct cooperation
+    {
+        struct accept
+        {
+            double xpos;
+            double ypos;
+        } accept;
+        struct refuse
+        {
+            double xpos;
+            double ypos;
+        } refuse;
+    }cooperation;
 } posInfo;
 
 class classify : public QObject

@@ -12,7 +12,9 @@ void juexing::startTask()
     counter *countermanager=new counter();
     control *controller=new control(handle);
     match *matchmanager=new match(handle,controller);
+    operations *operationsmanager=new operations(handle,controller,matchmanager,countermanager);
     countermanager->setProps(guiInfo.propcount);
+    countermanager->setJieJieProps(guiInfo.jiejiepropcount);
     if(mode_type==team_mode)
     {
         is_leader_thread=matchmanager->matchLeader();
@@ -73,7 +75,7 @@ void juexing::startTask()
                     int time=0;
                     while(runflag && matchmanager->checkPersonCount()!=guiInfo.person)
                     {
-                        delayer->delayms(&runflag,500);
+                        delayer->delayms(&runflag,SAMPLE_TIME);
                         time++;
                         if(time==600)
                         {
@@ -95,53 +97,56 @@ void juexing::startTask()
                 }
             }
         }
-        delayer->delayms(&runflag,1500);
-        while(runflag && matchmanager->matchTemplateAndGetValue("friend.png",matchmanager->getScreenshot(0.05,0.25,0,0.15))<0.9)
+        if(operationsmanager->fightOperations(&runflag) && !guiInfo.failstop)
         {
-            delayer->delayms(&runflag,500);
+
+            emit promptmanager->failevent();
+            delete matchmanager;
+            delete operationsmanager;
+            delete controller;
+            delete countermanager;
+            return;
         }
-        delayer->delayms(&runflag,2000);
-        while(runflag && matchmanager->compareResult(matchmanager->getScreenshot(0.75,1,0.5,1),prepare_mode)==1)
+        if(guiInfo.stopwhenlimit)
         {
-            delayer->delayms(&runflag,500);
-        }
-        while(runflag && matchmanager->matchTemplateAndGetValue("time.png",matchmanager->getScreenshot(0.8,1,0,0.25))>0.8)
-        {
-            delayer->delayms(&runflag,500);
-        }
-        while(runflag && matchmanager->matchTemplateAndGetValue("victory.png",matchmanager->getScreenshot(0.2,0.6,0,0.5))<0.8)
-        {
-            delayer->delayms(&runflag,100);
-        }
-        while(runflag && matchmanager->matchTemplateAndGetValue("prize.png",matchmanager->getScreenshot(0.3,0.75,0.45,1))<0.8)
-        {
-            delayer->delayms(&runflag,500);
-            controller->click(posInfo.common.finish_pos.xpos,posInfo.common.finish_pos.ypos);
-        }
-        while(runflag && matchmanager->matchTemplateAndGetValue("prize.png",matchmanager->getScreenshot(0.3,0.75,0.45,1))>0.8)
-        {
-            delayer->delayms(&runflag,500);
-            controller->click(posInfo.common.finish_pos.xpos,posInfo.common.finish_pos.ypos);
+            if(countermanager->getJieJieProp()>=30)
+            {
+                emit promptmanager->updateShowArea("窗口"+QString::number(id)+":"+"结界突破券达到上限!已停止!",INFO);
+                emit promptmanager->finishevent();
+                delete matchmanager;
+                delete operationsmanager;
+                delete controller;
+                delete countermanager;
+                return;
+            }
         }
         if(mode_type==single_mode)
         {
             while(runflag && !matchmanager->matchStrength(single_mode))
             {
-                delayer->delayms(&runflag,500);
+                delayer->delayms(&runflag,SAMPLE_TIME);
+                if(!guiInfo.failstop)
+                {
+                    controller->click(posInfo.common.finish_pos.xpos,posInfo.common.finish_pos.ypos);
+                }
             }
         }
         else if(mode_type==team_mode)
         {
             while(runflag && matchmanager->matchTemplateAndGetValue("title.png",matchmanager->getScreenshot(0,0.25,0,0.15))<0.9)
             {
-                delayer->delayms(&runflag,500);
+                delayer->delayms(&runflag,SAMPLE_TIME);
+                if(!guiInfo.failstop)
+                {
+                    controller->click(posInfo.common.finish_pos.xpos,posInfo.common.finish_pos.ypos);
+                }
             }
         }
-        delayer->delayms(&runflag,500);
-        delete matchmanager;
-        delete controller;
-        delete countermanager;
+        delayer->delayms(&runflag,1000);
     }
+    delete matchmanager;
+    delete controller;
+    delete countermanager;
 }
 
 void juexing::run()

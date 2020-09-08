@@ -53,6 +53,7 @@ bool match::matchProp(int mode)
     }
 }
 
+/*函数功能:判断是否为队长*/
 bool match::matchLeader()
 {
     if(matchTemplateAndGetValue("leaderflag1.png",getScreenshot(0.85,1,0.75,1))>0.9 || matchTemplateAndGetValue("leaderflag2.png",getScreenshot(0.85,1,0.75,1))>0.9)
@@ -60,6 +61,26 @@ bool match::matchLeader()
         return true;
     }
     return false;
+}
+
+/*函数功能:判断当前界面是否有所选协作*/
+quint8 match::matchCooperation()
+{
+    if((guiInfo.magatama30 && matchTemplateAndGetValue("magatama30.png",getScreenshot(0.36,0.69,0.50,0.80))>0.9) ||
+       (guiInfo.strength30 && matchTemplateAndGetValue("strength30.png",getScreenshot(0.36,0.69,0.50,0.80))>0.9) ||
+       (guiInfo.gold2w && matchTemplateAndGetValue("gold2w.png",getScreenshot(0.36,0.69,0.50,0.80))>0.9) ||
+       (guiInfo.gold3w && matchTemplateAndGetValue("gold3w.png",getScreenshot(0.36,0.69,0.50,0.80))>0.9))
+    {
+        return cooperation_accept;
+    }
+    else if(matchTemplateAndGetValue("magatama30.png",getScreenshot(0.36,0.69,0.50,0.80))>0.9 ||
+            matchTemplateAndGetValue("strength30.png",getScreenshot(0.36,0.69,0.50,0.80))>0.9 ||
+            matchTemplateAndGetValue("gold2w.png",getScreenshot(0.36,0.69,0.50,0.80))>0.9 ||
+            matchTemplateAndGetValue("gold3w.png",getScreenshot(0.36,0.69,0.50,0.80))>0.9)
+    {
+        return cooperation_refuse;
+    }
+    return no_find;
 }
 
 /*函数功能:返回最符合的结果*/
@@ -81,20 +102,20 @@ int match::compareResult(Mat img,int mode)
             index=oldlist.indexOf(mostmatch);
             if(index==0)
             {
-                return 6;
+                return STRENGTH_6;
             }
             else if(index==1)
             {
-                return 9;
+                return STRENGTH_9;
             }
             else if(index==2)
             {
-                return 12;
+                return STRENGTH_12;
             }
         }
         else
         {
-            return 0;
+            return NO_MATCH;
         }
     }
     else if(mode==team_mode)
@@ -110,20 +131,20 @@ int match::compareResult(Mat img,int mode)
             index=oldlist.indexOf(mostmatch);
             if(index==0)
             {
-                return 4;
+                return STRENGTH_4;
             }
             else if(index==1)
             {
-                return 6;
+                return STRENGTH_6;
             }
             else if(index==2)
             {
-                return 8;
+                return STRENGTH_8;
             }
         }
         else
         {
-            return 0;
+            return NO_MATCH;
         }
     }
     else if(mode==yyh_mode)
@@ -139,34 +160,33 @@ int match::compareResult(Mat img,int mode)
             index=oldlist.indexOf(mostmatch);
             if(index==0)
             {
-                return -1;
+                return PROP_TAN;
             }
             else if(index==1)
             {
-                return -2;
+                return PROP_CHEN;
             }
             else if(index==2)
             {
-                return -3;
+                return PROP_CHI;
             }
         }
         else
         {
-            return 0;
+            return NO_MATCH;
         }
     }
     else if(mode==yuling_mode)
     {
         if(matchTemplateAndGetValue("yuling.png",img)>0.8)
         {
-            return -4;
+            return PROP_YULING;
         }
         else
         {
-            return 0;
+            return NO_MATCH;
         }
-
-        return 0;
+        return NO_MATCH;
     }
     else if(mode==prepare_mode)
     {
@@ -176,30 +196,61 @@ int match::compareResult(Mat img,int mode)
         mostmatch=oldlist.at(oldlist.size()-1);
         if(mostmatch>0.8)
         {
-            return 1;
+            return GOOD_MATCH;
         }
         else
         {
-            return 0;
+            return NO_MATCH;
         }
     }
-    return 0;
+    else if(mode==fight_mode)
+    {
+        oldlist.append(matchTemplateAndGetValue("victory.png",img));
+        oldlist.append(matchTemplateAndGetValue("fail.png",img));
+        resultlist=oldlist;
+        std::sort(resultlist.begin(),resultlist.end());
+        mostmatch=resultlist.at(resultlist.size()-1);
+        if(mostmatch>0.8)
+        {
+            index=oldlist.indexOf(mostmatch);
+            if(index==0)
+            {
+                return FIGHT_VICTORY;
+            }
+            else if(index==1)
+            {
+                return FIGHT_FAIL;
+            }
+        }
+        else
+        {
+            return NO_MATCH;
+        }
+    }
+    return NO_MATCH;
 }
 
 /*函数功能:进行模板匹配并返回匹配位置*/
-void match::matchTemplateAndReturnPos(QString filename,Mat target,int *x,int *y)
+void match::matchTemplateAndReturnPos(QString filename,Mat target,int *x,int *y,bool centermode)
 {
     Mat result;
     double min_val,max_val;
-    cv::Point min_loc,max_loc;
+    Point min_loc,max_loc;
     Mat templateimg=imread(filename);
-    cv::matchTemplate(target,templateimg,result,CV_TM_CCOEFF_NORMED);
+    matchTemplate(target,templateimg,result,CV_TM_CCOEFF_NORMED);
     minMaxLoc(result,&min_val,&max_val,&min_loc,&max_loc,Mat());
     if(max_val>=0.9)
     {
-        *x=(max_loc.x+templateimg.rows/2)*dpi;
-        *y=(max_loc.y+templateimg.cols/2)*dpi;
-
+        if(centermode)
+        {
+            *x=(max_loc.x+templateimg.rows/2)*dpi;
+            *y=(max_loc.y+templateimg.cols/2)*dpi;
+        }
+        else
+        {
+            *x=max_loc.x*dpi;
+            *y=max_loc.y*dpi;
+        }
     }
     else
     {
@@ -213,15 +264,15 @@ double match::matchTemplateAndGetValue(QString filename,Mat target)
 {
     Mat result;
     double min_val,max_val;
-    cv::Point min_loc,max_loc,matchLoc;
+    Point min_loc,max_loc,matchLoc;
     Mat templateimg=imread(filename);
-    cv::matchTemplate(target,templateimg,result,CV_TM_CCOEFF_NORMED);
+    matchTemplate(target,templateimg,result,CV_TM_CCOEFF_NORMED);
     minMaxLoc(result,&min_val,&max_val,&min_loc,&max_loc,Mat());
     return max_val;
 }
 
 /*函数功能:检测组队人数*/
-int match::checkPersonCount()
+quint8 match::checkPersonCount()
 {
     int personcount=1;
     if(matchTemplateAndGetValue("second.png",getScreenshot(0.3,0.6,0.2,0.6))<=0.8)
@@ -235,8 +286,31 @@ int match::checkPersonCount()
     return personcount;
 }
 
+/*函数功能:获取得到的结界突破券数量*/
+quint8 match::getMatchedJieJiePropsCount(Mat img)
+{
+    Mat mask=imread("mask.png");
+    quint8 count=0;
+    int x,y;
+    while(1)
+    {
+        if(matchTemplateAndGetValue("jiejieprop.png",img)>0.8)
+        {
+            count++;
+            matchTemplateAndReturnPos("jiejieprop.png",img,&x,&y,false);
+            Rect rect=Rect(x/dpi,y/dpi,mask.cols,mask.rows);
+            mask.copyTo(img(rect));
+        }
+        else
+        {
+            break;
+        }
+    }
+    return count;
+}
+
 /*函数功能:截取客户端界面(参数:左边界，右边界，上边界，下边界(比例))*/
-Mat match::getScreenshot(float l=0,float r=1,float t=0,float b=1)
+Mat match::getScreenshot(float l,float r,float t,float b,bool gray)
 {
     HDC hDC;
     HDC hMemDC;
@@ -278,10 +352,20 @@ Mat match::getScreenshot(float l=0,float r=1,float t=0,float b=1)
     bi.biClrUsed = 0;
     bi.biClrImportant = 0;
     GetDIBits(hMemDC,hBitmap,0,h,src.data,(BITMAPINFO *)&bi,DIB_RGB_COLORS);
-    Mat graymat,graytarget;
-    cvtColor(src,graymat,CV_BGR2GRAY);
-    graytarget=graymat(cv::Rect(0,0,w/dpi,h/dpi));
-    Mat contentimg=graytarget(cv::Rect(xframe,caption,graytarget.cols-2*xframe,graytarget.rows-caption-yframe));
+    Mat contentimg;
+    if(gray)
+    {
+        Mat graymat,graytarget;
+        cvtColor(src,graymat,CV_BGR2GRAY);
+        graytarget=graymat(cv::Rect(0,0,w/dpi,h/dpi));
+        contentimg=graytarget(cv::Rect(xframe,caption,graytarget.cols-2*xframe,graytarget.rows-caption-yframe));
+    }
+    else
+    {
+        Mat imgmat;
+        imgmat=src(cv::Rect(0,0,w/dpi,h/dpi));
+        contentimg=imgmat(cv::Rect(xframe,caption,imgmat.cols-2*xframe,imgmat.rows-caption-yframe));
+    }
     Mat imageROI=contentimg(cv::Rect(int(contentimg.cols*l),int(contentimg.rows*t),int(contentimg.cols*(r-l)),int(contentimg.rows*(b-t))));
     DeleteObject(hOldBmp);
     //SelectObject(hMemDC,hOldBmp);
@@ -310,7 +394,7 @@ Mat match::imread(QString filepath,int flag)
         m=imdecode(buf,flag);
     }
     Mat img;
-    resize(m, img, Size(m.cols/dpi*1.25,m.rows/dpi*1.25),CV_INTER_AREA);
+    resize(m,img,Size(m.cols/dpi*1.25,m.rows/dpi*1.25),CV_INTER_AREA);
     return img;
 }
 
