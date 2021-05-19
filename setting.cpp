@@ -1,4 +1,4 @@
-#include "setting.h"
+﻿#include "setting.h"
 #include "ui_setting.h"
 
 setting::setting(QWidget *parent) :
@@ -68,9 +68,10 @@ void setting::getWidgetsInfo()
     widgetsinfo[index_stopwhenlimit]=ui->check_stopWhenLimit->checkState();
     widgetsinfo[index_jiejiepropcount]=ui->edit_jiejiePropCount->text().toInt();
     widgetsinfo[index_popupwhenstop]=ui->check_popupWhenStop->checkState();
-    emit destroywindows(widgetsinfo);
+    widgetsinfo[index_updateflag]=ui->check_autoUpdate->checkState();
     saveSettingInfo();
     this->close();
+    emit destroywindows(widgetsinfo);
 }
 
 /*函数功能:界面初始化*/
@@ -109,6 +110,7 @@ void setting::setArgs()
     ui->check_stopWhenLimit->setChecked(widgetsinfo[index_stopwhenlimit]);
     ui->edit_jiejiePropCount->setText(QString::number(widgetsinfo[index_jiejiepropcount]));
     ui->check_popupWhenStop->setChecked(widgetsinfo[index_popupwhenstop]);
+    ui->check_autoUpdate->setChecked(widgetsinfo[index_updateflag]);
     viewInit();
     emit destroywindows(widgetsinfo);
 }
@@ -139,12 +141,18 @@ void setting::loadSettingInfo()
     QString currentpath=QDir::currentPath();
     QFile file(currentpath+"/config.ini");
     uint checkdata=0;
+    updatewindow->clearOldFiles();
     if(file.exists() && file.open(QIODevice::ReadOnly|QIODevice::Text))
     {
         for(int i=0;i<index_end;i++)
         {
             widgetsinfo[i]=file.readLine().toUInt();
             checkdata+=widgetsinfo[i];
+        }
+        if(widgetsinfo[index_updateflag]==Qt::Checked)
+        {
+            connect(updatewindow,SIGNAL(finished()),this,SLOT(sendRestartProgramSignal()));
+            updatewindow->showUpdateWindow();
         }
         if(file.readLine().toUInt()==checkdata)
         {
@@ -186,4 +194,9 @@ void setting::unfreezeUI()
     ui->check_popupWhenStop->setEnabled(true);
     ui->edit_jiejiePropCount->setEnabled(true);
     viewInit();
+}
+
+void setting::sendRestartProgramSignal()
+{
+    emit restart();
 }

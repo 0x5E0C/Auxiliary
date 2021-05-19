@@ -1,4 +1,4 @@
-#ifndef YUHUN_H
+﻿#ifndef YUHUN_H
 #define YUHUN_H
 
 #include <QObject>

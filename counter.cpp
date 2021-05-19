@@ -1,4 +1,4 @@
-#include "counter.h"
+﻿#include "counter.h"
 
 counter::counter()
 {

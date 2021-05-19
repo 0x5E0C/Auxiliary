@@ -1,4 +1,4 @@
-#include "juexing.h"
+﻿#include "juexing.h"
 
 juexing::juexing(HWND hwnd,int mode,int threadid)
 {

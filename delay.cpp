@@ -1,4 +1,4 @@
-#include "delay.h"
+﻿#include "delay.h"
 
 delay *delayer=new delay();
 

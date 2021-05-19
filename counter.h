@@ -1,4 +1,4 @@
-#ifndef PROPMANAGER_H
+﻿#ifndef PROPMANAGER_H
 #define PROPMANAGER_H
 
 #include "config.h"

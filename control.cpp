@@ -1,4 +1,4 @@
-#include "control.h"
+﻿#include "control.h"
 #include <QDebug>
 
 control::control(HWND hwnd)

@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -30,7 +30,7 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    setting *settingwindows=new setting();
+    setting *settingwindow=new setting();
     classify *classifymanager;
     int freezeflag;
     bool startflag=false;

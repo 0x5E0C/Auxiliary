@@ -1,4 +1,4 @@
-#include "operations.h"
+﻿#include "operations.h"
 
 operations::operations(HWND hwnd,control *ctrler,match *matcher,counter *counter)
 {

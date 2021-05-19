@@ -85,7 +85,7 @@
      <x>30</x>
      <y>120</y>
      <width>471</width>
-     <height>231</height>
+     <height>251</height>
     </rect>
    </property>
    <property name="font">
@@ -234,6 +234,25 @@
     </property>
     <property name="checked">
      <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="check_autoUpdate">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>210</y>
+      <width>201</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>宋体</family>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>每次启动时检测更新</string>
     </property>
    </widget>
   </widget>

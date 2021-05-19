@@ -1,4 +1,4 @@
-#ifndef JUEXING_H
+﻿#ifndef JUEXING_H
 #define JUEXING_H
 
 #include <QObject>

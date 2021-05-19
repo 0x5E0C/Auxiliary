@@ -1,5 +1,4 @@
-#include "match.h"
-#include <QDebug>
+﻿#include "match.h"
 
 double dpi;
 

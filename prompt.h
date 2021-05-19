@@ -1,4 +1,4 @@
-#ifndef PROMPT_H
+﻿#ifndef PROMPT_H
 #define PROMPT_H
 
 #include <QObject>

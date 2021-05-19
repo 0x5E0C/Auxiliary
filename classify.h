@@ -1,4 +1,4 @@
-#ifndef CLASSIFY_H
+﻿#ifndef CLASSIFY_H
 #define CLASSIFY_H
 
 #include <QObject>

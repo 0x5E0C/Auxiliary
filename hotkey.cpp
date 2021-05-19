@@ -1,4 +1,4 @@
-#include "hotkey.h"
+﻿#include "hotkey.h"
 
 HHOOK g_hook;
 hotkey *hotkeymanager=new hotkey();
@@ -34,9 +34,7 @@ LRESULT hotkey::keyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
     return CallNextHookEx(g_hook, nCode, wParam, lParam);
 }
 
-/*函数功能:发送热键事件*/
 void hotkey::emitHotkeySignals()
 {
     emit hotkeyevent();
 }
-

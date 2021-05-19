@@ -1,4 +1,4 @@
-#ifndef HOTKEY_H
+﻿#ifndef HOTKEY_H
 #define HOTKEY_H
 
 #include <QObject>

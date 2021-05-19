@@ -1,4 +1,4 @@
-#include "classify.h"
+﻿#include "classify.h"
 
 bool *threadflaglist[MAX_PROCESS_COUNT];
 int process_count;
@@ -184,7 +184,11 @@ void classify::scanProcess()
 {
     HWND handle;
     int i=0;
-    handle=FindWindowEx(NULL,NULL,NULL,title.toLocal8Bit());
+#ifdef USE_MINGW32
+	handle = FindWindowEx(NULL, handle, NULL, title.toLocal8Bit());
+#elif USE_MSVC
+    handle=FindWindowEx(NULL,NULL,NULL,title.toStdWString().c_str());
+#endif
     while(handle!=NULL)
     {
         if(!IsIconic(handle))
@@ -192,7 +196,11 @@ void classify::scanProcess()
             handle_list[i]=handle;
             i++;
         }
-        handle=FindWindowEx(NULL,handle,NULL,title.toLocal8Bit());
+#ifdef USE_MINGW32
+		handle = FindWindowEx(NULL, handle, NULL, title.toLocal8Bit());
+#elif USE_MSVC
+		handle = FindWindowEx(NULL, NULL, NULL, title.toStdWString().c_str());
+#endif
     }
     process_count=i;
 }

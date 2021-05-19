@@ -1,9 +1,10 @@
-#ifndef SETTING_H
+﻿#ifndef SETTING_H
 #define SETTING_H
 
 #include <QWidget>
 #include <QMessageBox>
 #include <QDir>
+#include "update.h"
 #include "config.h"
 
 namespace Ui {
@@ -16,6 +17,7 @@ class setting : public QWidget
 
 signals:
     void destroywindows(QVector<quint8> info);
+    void restart();
 
 public:
     explicit setting(QWidget *parent = nullptr);
@@ -28,6 +30,7 @@ public:
 private:
     Ui::setting *ui;
     QVector<quint8> widgetsinfo;
+    class update *updatewindow=new class update();
     void viewInit();
     bool check();
     void saveSettingInfo();
@@ -35,6 +38,7 @@ private:
 private slots:
     void getWidgetsInfo();
     void changeEditLimitEnable(int state);
+    void sendRestartProgramSignal();
 };
 
 #endif // SETTING_H

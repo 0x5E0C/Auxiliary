@@ -1,10 +1,14 @@
 QT       += core gui
+QT       += network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
 CONFIG += static
-DEFINES+=STATIC
+DEFINES+= STATIC
+
+win32-g++:DEFINES += USE_MINGW32
+else:win32:!win32-g++:DEFINES += USE_MSVC
 
 # The following define makes your compiler emit warnings if you use
 # any Qt feature that has been marked deprecated (the exact warnings
@@ -30,6 +34,7 @@ SOURCES += \
     operations.cpp \
     prompt.cpp \
     setting.cpp \
+    update.cpp \
     yuhun.cpp \
     yuling.cpp
 
@@ -47,17 +52,28 @@ HEADERS += \
     operations.h \
     prompt.h \
     setting.h \
+    update.h \
     yuhun.h \
     yuling.h
 
 FORMS += \
     mainwindow.ui \
-    setting.ui
+    setting.ui \
+    update.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+win32-g++:INCLUDEPATH += D:/installfile/Qt/Qt5.15.2/5.15.2/mingw81_64/include/QtGui/5.15.2/
+else:win32:!win32-g++:INCLUDEPATH += D:/installfile/Qt/Qt5.15.2/5.15.2/msvc2015_64/include/QtGui/5.15.2/
+
+win32-g++:INCLUDEPATH += D:/installfile/Qt/Qt5.15.2/5.15.2/mingw81_64/include/QtCore/5.15.2/
+else:win32:!win32-g++:INCLUDEPATH += D:/installfile/Qt/Qt5.15.2/5.15.2/msvc2015_64/include/QtCore/5.15.2/
+
+win32-g++:INCLUDEPATH += D:/installfile/Qt/Qt5.15.2/5.15.2/mingw81_64/include/QtGui/5.15.2/QtGui/private
+else:win32:!win32-g++:INCLUDEPATH += D:/installfile/Qt/Qt5.15.2/5.15.2/msvc2015_64/include/QtGui/5.15.2/QtGui/private
 
 win32-g++:INCLUDEPATH += D:/installfile/OpenCV/MinGW/include
 win32-g++:INCLUDEPATH += D:/installfile/OpenCV/MinGW/include/opencv
@@ -68,6 +84,7 @@ else:win32:!win32-g++:INCLUDEPATH += D:/installfile/OpenCV/MSVC/include/opencv2
 
 INCLUDEPATH += C:/Program Files (x86)/Windows Kits/10/Include/10.0.14393.0/um
 
+
 win32-g++:LIBS += D:/installfile/OpenCV/MinGW/x64/mingw/lib/libopencv*.dll.a
 else:win32:!win32-g++:LIBS += D:/installfile/OpenCV/MSVC/x64/vc14/lib/opencv*.lib
 
@@ -76,7 +93,11 @@ DEFINES-= UNICODE
 RESOURCES += \
     imgresource.qrc
 
-RC_FILE = Auxiliary.rc
+win32-g++:RC_FILE = Auxiliary.rc
+#else:QMAKE_LFLAGS += /MANIFESTUAC:\"level=\'requireAdministrator\' uiAccess=\'false\'\"
 
 DISTFILES += \
     Auxiliary.exe.manifest
+
+win32: LIBS += -lUser32
+win32: LIBS += -lGdi32

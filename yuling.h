@@ -1,4 +1,4 @@
-#ifndef YULING_H
+﻿#ifndef YULING_H
 #define YULING_H
 
 #include <QObject>

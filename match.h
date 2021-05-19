@@ -1,4 +1,4 @@
-#ifndef MATCH_H
+﻿#ifndef MATCH_H
 #define MATCH_H
 
 #include <QString>

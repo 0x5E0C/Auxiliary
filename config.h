@@ -1,7 +1,8 @@
-#ifndef CONFIG_H
+﻿#ifndef CONFIG_H
 #define CONFIG_H
 
 #include <QString>
+#include <QStandardPaths>
 #include <QDebug>
 #include <Windows.h>
 #include <iostream>
@@ -9,13 +10,19 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
+#pragma execution_character_set("utf-8")
+
+const QString title="阴阳师-网易游戏";
+const QString version="v4.0.0";
+const QString downloadpath=QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+
 #define desktopID           65552
 
 #define ERR                 0
 #define INFO                1
 
 #define BASE_TIME           100
-#define CLICK_TIME_INTERBAL 200
+#define CLICK_TIME_INTERBAL 100
 #define SAMPLE_TIME         200
 
 #define MAX_PROCESS_COUNT   8
@@ -84,6 +91,7 @@ enum settingindex
     index_stopwhenlimit,
     index_jiejiepropcount,
     index_popupwhenstop,
+    index_updateflag,
     index_end
 };
 
@@ -93,7 +101,5 @@ enum cooperation
     cooperation_refuse,
     no_find
 };
-
-const QString title="阴阳师-网易游戏";
 
 #endif // CONFIG_H

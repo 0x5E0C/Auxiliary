@@ -1,4 +1,4 @@
-#include "yuling.h"
+﻿#include "yuling.h"
 
 yuling::yuling(HWND hwnd,int threadid)
 {

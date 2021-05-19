@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -7,7 +7,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     hotkeymanager->setHook();
-    setWindowFlags(0);
+    setWindowFlags(Qt::Widget);
     setFixedSize(this->width(),this->height());
     setWindowTitle("辅助器");
     viewInit();
@@ -25,14 +25,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->yuling_button_pause,SIGNAL(clicked()),this,SLOT(pause()));
     connect(ui->yuling_button_stop,SIGNAL(clicked()),this,SLOT(stop()));
     connect(ui->button_open_setting,SIGNAL(clicked()),this,SLOT(openSettingPage()));
-    connect(settingwindows,SIGNAL(destroywindows(QVector<quint8>)),this,SLOT(getSettingInfo(QVector<quint8>)));
+    connect(settingwindow,SIGNAL(destroywindows(QVector<quint8>)),this,SLOT(getSettingInfo(QVector<quint8>)));
+    connect(settingwindow,SIGNAL(restart()),this,SLOT(close()));
     connect(hotkeymanager,SIGNAL(hotkeyevent()),this,SLOT(pause()));
     connect(promptmanager,SIGNAL(errorevent()),this,SLOT(stop()));
     connect(promptmanager,SIGNAL(updateShowArea(QString,int)),this,SLOT(addToShowArea(QString,int)));
     connect(promptmanager,SIGNAL(finishevent()),this,SLOT(stop()));
     connect(promptmanager,SIGNAL(updateUI(int,int,int)),this,SLOT(updateInfo(int,int,int)));
     connect(promptmanager,SIGNAL(failevent()),this,SLOT(stop()));
-    settingwindows->loadSettingInfo();
+    settingwindow->loadSettingInfo();
 }
 
 MainWindow::~MainWindow()
@@ -48,7 +49,7 @@ void MainWindow::start()
         startflag=true;
         getWidgetsInfo();
         freezeUI();
-        settingwindows->freezeUI();
+        settingwindow->freezeUI();
         addToShowArea("即将开始!",INFO);
         addToShowArea("读取设置中...",INFO);
         addToShowArea("已选择副本："+guiInfo.floortext,INFO);
@@ -62,7 +63,7 @@ void MainWindow::start()
 void MainWindow::pause()
 {
     startflag=false;
-    settingwindows->unfreezeUI();
+    settingwindow->unfreezeUI();
     if(freezeflag==C_YUHUN)
     {
         ui->yuhun_button_start->setEnabled(true);
@@ -94,7 +95,7 @@ void MainWindow::stop()
     }
     startflag=false;
     unfreezeUI();
-    settingwindows->unfreezeUI();
+    settingwindow->unfreezeUI();
     for(int i=0;i<process_count;i++)
     {
         *threadflaglist[i]=false;
@@ -430,8 +431,11 @@ void MainWindow::getWidgetsInfo()
 /*函数功能:获取系统dpi*/
 void MainWindow::getAppDPI()
 {
-
-    HDC appDc = GetDC(FindWindowEx(NULL,NULL,NULL,title.toLocal8Bit()));
+#ifdef USE_MINGW32
+	HDC appDc = GetDC(FindWindowEx(NULL, NULL, NULL, title.toLocal8Bit()));
+#elif USE_MSVC
+	HDC appDc = GetDC(FindWindowEx(NULL, NULL, NULL, title.toStdWString().c_str()));
+#endif
     int verticalDPI = GetDeviceCaps(appDc,LOGPIXELSY);
     switch (verticalDPI)
     {
@@ -490,8 +494,8 @@ void MainWindow::updateInfo(int mode,int info,int flag)
 /*函数功能:打开设置界面*/
 void MainWindow::openSettingPage()
 {
-    settingwindows->setWindowTitle("设置");
-    settingwindows->show();
+    settingwindow->setWindowTitle("设置");
+    settingwindow->show();
 }
 
 /*函数功能:获取设置界面参数*/
@@ -552,4 +556,3 @@ void MainWindow::unfreezeUI()
     changeChallengeMode(ui->yuhun_chooseFloor->currentIndex());
     setTeamModeEnbale(C_JUEXING,true);
 }
-

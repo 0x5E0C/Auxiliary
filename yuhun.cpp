@@ -1,4 +1,4 @@
-#include "yuhun.h"
+﻿#include "yuhun.h"
 
 yuhun::yuhun(HWND hwnd,int mode,int threadid)
 {
@@ -7,7 +7,6 @@ yuhun::yuhun(HWND hwnd,int mode,int threadid)
     id=threadid;
 }
 
-/*函数功能:开始御魂模式程序流程*/
 void yuhun::startTask()
 {
     counter *countermanager=new counter();
@@ -201,4 +200,3 @@ void yuhun::run()
     runflag=true;
     startTask();
 }
-
