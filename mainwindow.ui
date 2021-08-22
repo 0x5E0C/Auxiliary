@@ -61,6 +61,9 @@
          <property name="font">
           <font>
            <family>宋体</family>
+           <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -82,6 +85,9 @@
          <property name="font">
           <font>
            <family>宋体</family>
+           <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -94,6 +100,9 @@
          <property name="font">
           <font>
            <family>宋体</family>
+           <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="currentText">
@@ -131,17 +140,17 @@
          </item>
          <item>
           <property name="text">
-           <string>日轮之城 1层</string>
+           <string>日轮之陨 1层</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>日轮之城 2层</string>
+           <string>日轮之陨 2层</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>日轮之城 3层</string>
+           <string>日轮之陨 3层</string>
           </property>
          </item>
         </widget>
@@ -151,6 +160,9 @@
          <property name="font">
           <font>
            <family>宋体</family>
+           <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -163,6 +175,9 @@
          <property name="font">
           <font>
            <family>宋体</family>
+           <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -187,6 +202,9 @@
          <property name="font">
           <font>
            <family>宋体</family>
+           <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -199,6 +217,9 @@
          <property name="font">
           <font>
            <family>宋体</family>
+           <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -211,6 +232,9 @@
          <property name="font">
           <font>
            <family>宋体</family>
+           <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -256,6 +280,8 @@
           <font>
            <family>宋体</family>
            <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -269,6 +295,8 @@
           <font>
            <family>宋体</family>
            <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -326,6 +354,8 @@
           <font>
            <family>宋体</family>
            <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -339,6 +369,8 @@
           <font>
            <family>宋体</family>
            <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -352,6 +384,8 @@
           <font>
            <family>宋体</family>
            <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -382,6 +416,8 @@
           <font>
            <family>宋体</family>
            <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -410,6 +446,8 @@
           <font>
            <family>宋体</family>
            <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -423,6 +461,8 @@
           <font>
            <family>宋体</family>
            <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -436,6 +476,8 @@
           <font>
            <family>宋体</family>
            <pointsize>11</pointsize>
+           <weight>50</weight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="text">
@@ -463,6 +505,8 @@
        <font>
         <family>宋体</family>
         <pointsize>11</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
@@ -506,7 +550,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>500</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>

@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
     hotkeymanager->setHook();
     setWindowFlags(Qt::Widget);
     setFixedSize(this->width(),this->height());
-    setWindowTitle("辅助器");
+    setWindowTitle("Auxiliary");
     viewInit();
     getAppDPI();
     connect(ui->yuhun_chooseFloor,SIGNAL(currentIndexChanged(int)),this,SLOT(changeChallengeMode(int)));

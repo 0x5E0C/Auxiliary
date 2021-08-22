@@ -24,12 +24,14 @@ class update : public QWidget
 
 signals:
     void finished();
+    void hasNewVersion();
 
 public:
     explicit update(QWidget *parent = nullptr);
     ~update();
     void showUpdateWindow();
     void clearOldFiles();
+    void getLastReleaseVersion();
 
 private:
     Ui::update *ui;
@@ -37,7 +39,7 @@ private:
     QNetworkReply *reply=NULL;
     QString lastversion=NULL;
     QFile *downloadfile=NULL;
-    void getDownloadAddr(QString url);
+    QString downloadurl;
     void upzipProgram();
     void clearUnzipDir();
     void renameOldProgram();
@@ -46,7 +48,7 @@ private:
     void restartProgram();
 
 private slots:
-    void getLastReleaseVersion();
+    void getDownloadAddr();
     void getLastRelease();
     void saveVersionInfo();
     void saveAsCache();

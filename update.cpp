@@ -7,7 +7,7 @@ update::update(QWidget *parent) :
     ui(new Ui::update)
 {
     ui->setupUi(this);
-    connect(ui->button_startupdate,SIGNAL(clicked()),this,SLOT(getLastReleaseVersion()));
+    connect(ui->button_startupdate,SIGNAL(clicked()),this,SLOT(getDownloadAddr()));
     connect(ui->button_cancel,SIGNAL(clicked()),this,SLOT(cancelUpdate()));
 }
 
@@ -62,22 +62,26 @@ void update::saveVersionInfo()
             QString pattern("browser_download_url\":\"(.*)\"");
             QRegExp regexp(pattern);
             regexp.setMinimal(true);
-            QString downloadurl=QString(content);
+            downloadurl=QString(content);
             if(downloadurl.contains(regexp))
             {
                 regexp.capturedTexts();
                 downloadurl=regexp.cap(1);
             }
-            getDownloadAddr(downloadurl);
+            emit hasNewVersion();
         }
     }
 }
 
-void update::getDownloadAddr(QString url)
+void update::getDownloadAddr()
 {
+    if(downloadurl.isEmpty())
+    {
+        return;
+    }
     QNetworkAccessManager *manager=new QNetworkAccessManager(this);
     QNetworkRequest request;
-    request.setUrl(QUrl(url));
+    request.setUrl(QUrl(downloadurl));
     reply=manager->get(request);
     connect(reply,SIGNAL(finished()),this,SLOT(getLastRelease()));
 }

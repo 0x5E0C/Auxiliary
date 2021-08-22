@@ -151,8 +151,9 @@ void setting::loadSettingInfo()
         }
         if(widgetsinfo[index_updateflag]==Qt::Checked)
         {
+            updatewindow->getLastReleaseVersion();
             connect(updatewindow,SIGNAL(finished()),this,SLOT(sendRestartProgramSignal()));
-            updatewindow->showUpdateWindow();
+            connect(updatewindow,SIGNAL(hasNewVersion()),this,SLOT(showUpdateWindow()));
         }
         if(file.readLine().toUInt()==checkdata)
         {
@@ -199,4 +200,9 @@ void setting::unfreezeUI()
 void setting::sendRestartProgramSignal()
 {
     emit restart();
+}
+
+void setting::showUpdateWindow()
+{
+    updatewindow->showUpdateWindow();
 }

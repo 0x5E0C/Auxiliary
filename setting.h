@@ -39,6 +39,7 @@ private slots:
     void getWidgetsInfo();
     void changeEditLimitEnable(int state);
     void sendRestartProgramSignal();
+    void showUpdateWindow();
 };
 
 #endif // SETTING_H
